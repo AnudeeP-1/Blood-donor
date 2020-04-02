@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                     //ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,pairs);
                    *//* options.toBundle());*//*
                 }*/
-
+                            //wertyuiop   PUSH TRY
             }
         },5000);
     }
