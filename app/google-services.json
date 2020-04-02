@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "768559047322",
-    "firebase_url": "https://blodydonor.firebaseio.com",
-    "project_id": "blodydonor",
-    "storage_bucket": "blodydonor.appspot.com"
+    "project_number": "717181494364",
+    "firebase_url": "https://blood-donation-ac522.firebaseio.com",
+    "project_id": "blood-donation-ac522",
+    "storage_bucket": "blood-donation-ac522.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:768559047322:android:0966eebe3e47ba38683523",
+        "mobilesdk_app_id": "1:717181494364:android:25b6927b6c97c621d23299",
         "android_client_info": {
           "package_name": "com.example.blood"
         }
       },
       "oauth_client": [
         {
-          "client_id": "768559047322-8d8br8lt482truvrg8so0o5aq64m8q8r.apps.googleusercontent.com",
+          "client_id": "717181494364-hcb9h9mc2qiq6u2c2spfdt5qbchm123s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.blood",
-            "certificate_hash": "1aafa10cb1736a48dc5e42401579e4853c40c5f3"
+            "certificate_hash": "b60dc23fb3f85f6a9a22e63627b8f3e923b806f2"
           }
         },
         {
-          "client_id": "768559047322-281r1jrgbuuedrsbid2sve07t15i0eu1.apps.googleusercontent.com",
+          "client_id": "717181494364-lek9u341ua3mjk3i6palnvibb9cnhgvu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyACqAnwd5bQx2_G1I3XkFdbhObdOVHCWvc"
+          "current_key": "AIzaSyAjojvKLMN6NuGWmf4wIvfoOrqMq1SSn6A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "768559047322-281r1jrgbuuedrsbid2sve07t15i0eu1.apps.googleusercontent.com",
+              "client_id": "717181494364-lek9u341ua3mjk3i6palnvibb9cnhgvu.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

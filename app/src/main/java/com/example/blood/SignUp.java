@@ -36,20 +36,11 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_up);
-        go = findViewById(R.id.crazy_go);
-        already = findViewById(R.id.already);
-
-        image = findViewById(R.id.signimage);
-        logo = findViewById(R.id.signtext);
-        desc = findViewById(R.id.signdesc);
-        txtf = findViewById(R.id.email);
+        id();
 
 
 
-        /*regName = findViewById(R.id.name);*/
-        regEmail = findViewById(R.id.email);
-        regPassword = findViewById(R.id.password2);
-        regPassword2 = findViewById(R.id.password3);
+
 
         /*new Handler().postDelayed(new Runnable() {
             @Override
@@ -66,7 +57,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (/*!validateName() | !validateUsername() | */!validateEmail() | !validatePassword() | !validatePassword2()) {
+                if (!validateEmail() | !validatePassword() | !validatePassword2()) { //validate fields
                     return;
                 }
 
@@ -201,13 +192,32 @@ public class SignUp extends AppCompatActivity {
         if (val.isEmpty()) {
             regPassword2.setError("Field cannot be empty");
             return false;
-        } else if (!val.matches(passwordVal)) {
+        }/* else if (!val.matches(passwordVal)) {
             regPassword2.setError("Password is too weak");
             return false;
-        } else {
+        }*/
+        else if(regPassword.getEditText().getText().toString().trim().equals(regPassword2.getEditText().getText().toString().trim()))
+        {
+           regPassword2.setError("Confirm password is not matching");
+           return false;
+        }
+        else
+         {
             regPassword2.setError(null);
             regPassword2.setErrorEnabled(false);
             return true;
         }
-    }}
+    }
+    private void id(){
+        go = findViewById(R.id.crazy_go);
+        already = findViewById(R.id.already);
+        image = findViewById(R.id.signimage);
+        logo = findViewById(R.id.signtext);
+        desc = findViewById(R.id.signdesc);
+        /*regName = findViewById(R.id.name);*/
+        regEmail = findViewById(R.id.email);
+        regPassword = findViewById(R.id.password2);
+        regPassword2 = findViewById(R.id.password3);
+    }
+}
 

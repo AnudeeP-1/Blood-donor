@@ -29,16 +29,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+        id();      //findeViewById method called
 
 
-        image = findViewById(R.id.Logo_image);
-        logoText = findViewById(R.id.logo_name);
-        sloganText = findViewById(R.id.slogan_name);
-        password = findViewById(R.id.password);
-        login_btn = findViewById(R.id.login_btn);
-        emailsignup = findViewById(R.id.emailsignup);
-        phonesignup = findViewById(R.id.phonesignup);
-        googlesignup = findViewById(R.id.googlesignup);
+
 
         /*emailsignup.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -88,4 +82,16 @@ public class Login extends AppCompatActivity {
 
         //write the code for google sign up(The button id is passed to the variable "googlesignup"
     }
+    //for setting id to variable
+    private void id(){
+        image = findViewById(R.id.Logo_image);
+        logoText = findViewById(R.id.logo_name);
+        sloganText = findViewById(R.id.slogan_name);
+        password = findViewById(R.id.password);
+        login_btn = findViewById(R.id.login_btn);
+        emailsignup = findViewById(R.id.emailsignup);
+        phonesignup = findViewById(R.id.phonesignup);
+        googlesignup = findViewById(R.id.googlesignup);
+    }
+
 }
