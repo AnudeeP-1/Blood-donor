@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:padding="20dp"
+    tools:context=".Login">
+
+    <ImageView
+        android:id="@+id/Logo_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/spl"
+        android:transitionName="logo_image"
+        />
+
+    <TextView
+        android:id="@+id/logo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bungee"
+        android:text="Hello there, Welcome back"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:transitionName="logo_text" />
+
+    <TextView
+        android:id="@+id/slogan_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/antic"
+        android:text="Sign in to continue"
+        android:textSize="18sp"
+        android:transitionName="logo_desc" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical" >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/loginemail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:transitionName="email_trans" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/password"
+            android:hint="Password"
+            app:passwordToggleEnabled="true"
+            android:transitionName="password_tran"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="Forgot Password?"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"/>
+
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GO"
+            android:background="#000"
+            android:textColor="#fff"
+            android:transitionName="button_tran" />
+
+        <Button
+            android:id="@+id/emailsignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email sign up"
+            android:background="#ED0202"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/mail"
+            android:paddingLeft="20dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:fontFamily="@font/antic"
+            android:transitionName="login_signup_tran" />
+
+        <Button
+            android:id="@+id/phonesignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with phone"
+            android:background="#1000F1"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/phone"
+            android:paddingLeft="20dp"
+            android:layout_margin="5dp"
+            android:fontFamily="@font/antic"
+            android:transitionName="login_signup_tran" />
+
+        <Button
+            android:id="@+id/googlesignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="continue with google"
+            android:background="#28FA03"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/google"
+            android:paddingLeft="20dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:fontFamily="@font/antic"
+            android:transitionName="login_signup_tran" />
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

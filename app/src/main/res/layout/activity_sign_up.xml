@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:padding="20dp"
+    tools:context=".SignUp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/signimage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/spl"
+        android:transitionName="logo_image"/>
+    <TextView
+        android:id="@+id/signtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome!!"
+        android:textSize="40sp"
+        android:fontFamily="@font/bungee"
+        android:layout_marginTop="-10dp"
+        android:textColor="@color/black"
+        android:transitionName="logo_text"
+        />
+    <TextView
+        android:id="@+id/signdesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in to start"
+        android:textSize="18sp"
+        android:transitionName="logo_text"
+        android:fontFamily="@font/antic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp" >
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:transitionName="email_trans" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:passwordToggleEnabled="true"
+            android:transitionName="password_tran">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Re type the password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:passwordToggleEnabled="true"
+            android:transitionName="password_tran">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingLeft="80dp">
+
+            <com.spark.submitbutton.SubmitButton
+                android:id="@+id/crazy_go"
+
+                android:layout_width="355dp"
+                android:layout_height="67dp"
+                android:layout_marginBottom="50dp"
+                android:foregroundGravity="center"
+                android:gravity="center|center_vertical"
+                android:text="Submit"
+                android:textColor="@color/gray"
+                app:sub_btn_background="@color/white"
+                app:sub_btn_duration="3000"
+                app:sub_btn_line_color="#008000"
+                app:sub_btn_ripple_color="#008000"
+                app:sub_btn_tick_color="@color/white" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/already"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="Already have account? LOG IN"
+            android:transitionName="login_signup_tran" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "768559047322",
+    "firebase_url": "https://blodydonor.firebaseio.com",
+    "project_id": "blodydonor",
+    "storage_bucket": "blodydonor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768559047322:android:0966eebe3e47ba38683523",
+        "android_client_info": {
+          "package_name": "com.example.blood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768559047322-8d8br8lt482truvrg8so0o5aq64m8q8r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.blood",
+            "certificate_hash": "1aafa10cb1736a48dc5e42401579e4853c40c5f3"
+          }
+        },
+        {
+          "client_id": "768559047322-281r1jrgbuuedrsbid2sve07t15i0eu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACqAnwd5bQx2_G1I3XkFdbhObdOVHCWvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768559047322-281r1jrgbuuedrsbid2sve07t15i0eu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
