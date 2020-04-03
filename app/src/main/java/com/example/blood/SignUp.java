@@ -13,11 +13,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +35,7 @@ public class SignUp extends AppCompatActivity {
     private ImageView image;
     private TextView logo, desc;
     private FirebaseAuth firebaseAuth;
+    private ScrollView scrollView;
     private FirebaseDatabase firebaseDatabase;
 
 
@@ -66,20 +69,22 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (validateEmail()&&validatePassword()&&validatePassword2()) { //validate fields
-                    Toast.makeText(SignUp.this,"if came",Toast.LENGTH_LONG).show();
                     firebaseAuth.createUserWithEmailAndPassword(regEmail.getEditText().getText().toString().trim(),regPassword.getEditText().getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 sendMail(); //for send the mail
-                                //Toast.makeText(SignUp.this,"email sent boss",Toast.LENGTH_LONG).show();
+
+                            }
+                            else{
+                                Snackbar.make(scrollView,"Registration failed",Snackbar.LENGTH_LONG).show();
                             }
                         }
                     });
 
                     Runnable r = new Runnable() {
                         public void run() {
-                            Intent intent = new Intent(SignUp.this,Login.class);
+                            //Intent intent = new Intent(SignUp.this,Login.class);
                             startActivity(new Intent(SignUp.this, Login.class));
                         /*Pair[] pairs = new Pair[4];
                         pairs[0] = new Pair<View,String>(image, "logo_image");
@@ -233,6 +238,7 @@ public class SignUp extends AppCompatActivity {
         image = findViewById(R.id.signimage);
         logo = findViewById(R.id.signtext);
         desc = findViewById(R.id.signdesc);
+        scrollView=findViewById(R.id.scroll);
         /*regName = findViewById(R.id.name);*/
         regEmail = findViewById(R.id.email);
         regPassword = findViewById(R.id.password2);
@@ -248,14 +254,14 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        Toast.makeText(SignUp.this,"Successfully registered, chaeck your Email",Toast.LENGTH_SHORT).show();
-                      //  senduserdata();
+                        Snackbar.make(scrollView,"Verification mail sent to your Email",Snackbar.LENGTH_LONG).show();
+                        //  senduserdata();
                         firebaseAuth.signOut();
                         finish();
                        // startActivity(new Intent(SignUp.this,Login.class));
                     }
                     else{
-                        Toast.makeText(SignUp.this,"Verification Mail not sent",Toast.LENGTH_SHORT).show();
+                        Snackbar.make(scrollView,"Try again..!",Snackbar.LENGTH_LONG).show();
                     }
                 }
             });

@@ -1,5 +1,6 @@
 package com.example.blood;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +13,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static com.example.blood.R.layout.activity_login;
 
@@ -24,7 +34,10 @@ public class Login extends AppCompatActivity {
     ImageView image;
     TextView logoText;
     TextView sloganText;
-    TextInputLayout username, password;
+    TextInputLayout email, password;
+    private ScrollView scrollView;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +45,18 @@ public class Login extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         id();      //findeViewById method called
+//        FirebaseUser user=firebaseAuth.getCurrentUser();
+//        if(user!=null){
+//            finish();
+//            startActivity(new Intent(this,Next.class));
+//        }
 
+        login_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LOGIN();
+            }
+        });
 
 
 
@@ -94,6 +118,34 @@ public class Login extends AppCompatActivity {
         emailsignup = findViewById(R.id.emailsignup);
         phonesignup = findViewById(R.id.phonesignup);
         googlesignup = findViewById(R.id.googlesignup);
+        email=findViewById(R.id.loginemail);
+        scrollView=findViewById(R.id.scroll);
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+    }
+
+    private void LOGIN(){
+        firebaseAuth.signInWithEmailAndPassword(email.getEditText().getText().toString(),password.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser fireuser=firebaseAuth.getCurrentUser();
+                    Boolean emailflag=fireuser.isEmailVerified();
+                    if(emailflag){
+                        finish();
+                        startActivity(new Intent(Login.this,Next.class));
+                    }
+                    else{
+                        Snackbar.make(scrollView,"Verify email",Snackbar.LENGTH_LONG).show();
+                        firebaseAuth.signOut();
+                    }
+                }
+                else{
+                    Snackbar.make(scrollView,"Enter proper Email and Password",Snackbar.LENGTH_LONG).show();
+                }
+
+            }
+        });
     }
 
 }
