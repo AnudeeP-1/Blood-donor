@@ -121,22 +121,16 @@
             android:fontFamily="@font/antic"
             android:transitionName="login_signup_tran" />
 
-        <Button
-            android:id="@+id/googlesignup"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/googlBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="continue with google"
-            android:background="#28FA03"
-            android:textColor="#fff"
-            android:drawableLeft="@drawable/google"
-            android:paddingLeft="20dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:fontFamily="@font/antic"
-            android:transitionName="login_signup_tran" />
-
-
-
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.447"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.26" />
 
 
     </LinearLayout> </LinearLayout>
