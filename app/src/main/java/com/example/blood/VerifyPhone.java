@@ -69,15 +69,9 @@ public class VerifyPhone extends AppCompatActivity {
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(VerifyPhone.this, pairs);
                     startActivity(intent, options.toBundle());
                 }
-                String code = otp.getEditText().getText().toString();
 
-                if (code.isEmpty() || code.length() < 6) {
-                    otp.setError("Wrong OTP...");
-                    otp.requestFocus();
-                    return;
-                }
-                progressBar.setVisibility(View.VISIBLE);
-                verifyCode(code);
+                   // progressBar.setVisibility(View.VISIBLE);
+
 
             }
         });
@@ -98,16 +92,20 @@ public class VerifyPhone extends AppCompatActivity {
                             // Intent intent = new Intent(getApplicationContext(), Login.class);
                             //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             //startActivity(intent);
+                            startActivity(new Intent(VerifyPhone.this,Next.class));
 
                         } else {
-                            Toast.makeText(VerifyPhone.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyPhone.this,"something problem",Toast.LENGTH_LONG).show();
+                            Toast.makeText(VerifyPhone.this, task.getException().getMessage().toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
     private void sendVerificationCodeToUser(String Phoneverify) {
+        Toast.makeText(VerifyPhone.this,"109", Toast.LENGTH_SHORT).show();
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+91" + Phoneverify,        // Phone number to verify
+                "+91"+Phoneverify,        // Phone number to verify
                 60,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 TaskExecutors.MAIN_THREAD,   // Activity (for callback binding)
@@ -119,14 +117,29 @@ public class VerifyPhone extends AppCompatActivity {
                 public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
                     //Get the code in global variable
+                    Toast.makeText(VerifyPhone.this,"122", Toast.LENGTH_SHORT).show();
+
                     verificationCodeBySystem = s;
                 }
                 @Override
                 public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                    Toast.makeText(VerifyPhone.this,"completed", Toast.LENGTH_SHORT).show();
+
                     String code = phoneAuthCredential.getSmsCode();
                     if (code != null) {
                         progressBar.setVisibility(View.VISIBLE);
                         verifyCode(code);
+                    }
+                    else{
+                        String manual_code = otp.getEditText().getText().toString().trim();
+
+                        if (code.isEmpty() || code.length() < 6) {
+                            otp.setError("Wrong OTP...");
+                            otp.requestFocus();
+                            //return;
+                        }
+                        progressBar.setVisibility(View.VISIBLE);
+                        verifyCode(manual_code);
                     }
 
                 }

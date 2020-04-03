@@ -31,7 +31,7 @@ public class Phonesignup extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                String phoneno=regPhoneNo.getEditText().getText().toString();
+                String phoneno=regPhoneNo.getEditText().getText().toString().trim();
 
                 Intent intent = new Intent(Phonesignup.this, VerifyPhone.class);
                 intent.putExtra("phone",phoneno);

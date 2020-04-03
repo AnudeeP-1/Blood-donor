@@ -39,7 +39,7 @@ import static com.example.blood.R.layout.activity_login;
 
 public class Login extends AppCompatActivity {
 
-    Button emailsignup, phonesignup, googlesignup, login_btn;
+    Button emailsignup, phonesignup, login_btn;
     ImageView image;
     TextView logoText;
     TextView sloganText;
@@ -49,7 +49,6 @@ public class Login extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     //GOOGLE
     private SignInButton but;
-    private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 1;
     private GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthlistner;
@@ -57,7 +56,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthlistner);
+        firebaseAuth.addAuthStateListener(mAuthlistner);
     }
 
     @Override
@@ -128,15 +127,11 @@ public class Login extends AppCompatActivity {
         });
 
         //write the code for google sign up(The button id is passed to the variable "googlesignup"
-        but = findViewById(R.id.googlBtn);
-
-        mAuth = FirebaseAuth.getInstance();
-
         mAuthlistner = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if((firebaseAuth.getCurrentUser())!= null){
-                    startActivity(new Intent(Login.this,Next.class));
+                    //startActivity(new Intent(Login.this,Next.class));
 
                 }
             }
@@ -156,6 +151,7 @@ public class Login extends AppCompatActivity {
     }
     //for setting id to variable
     private void id(){
+        but = findViewById(R.id.googlBtn);
         image = findViewById(R.id.Logo_image);
         logoText = findViewById(R.id.logo_name);
         sloganText = findViewById(R.id.slogan_name);
@@ -217,17 +213,17 @@ public class Login extends AppCompatActivity {
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(Login.this,"SIGNED IN SUCCESSFULLY",Toast.LENGTH_SHORT).show();
                         } else {
                             // If sign in fails
-                            Toast.makeText(Login.this,"auth FAILED",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this,"SIGN IN FAILED",Toast.LENGTH_SHORT).show();
 
                         }
                     }
