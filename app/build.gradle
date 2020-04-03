@@ -47,6 +47,7 @@ dependencies {
 
     //added or edited
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
 
     implementation 'androidx.preference:preference:1.1.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -57,3 +58,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 }
+apply plugin: 'com.google.gms.google-services'

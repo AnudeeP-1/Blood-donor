@@ -63,7 +63,8 @@
         android:text="Send OTP"
         android:background="#000"
         android:textColor="#fff"
-        android:transitionName="login_signup_tran" />
+        android:transitionName="login_signup_tran"
+        android:onClick="registerUser"/>
 
 
 </LinearLayout>
