@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import static com.example.blood.R.layout.activity_login;
+
 public class Login extends AppCompatActivity {
 
     Button emailsignup, phonesignup, googlesignup, login_btn;

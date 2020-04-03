@@ -1,5 +1,6 @@
 package com.example.blood;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,19 +14,26 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.spark.submitbutton.SubmitButton;
 
 public class SignUp extends AppCompatActivity {
 
-    TextInputLayout regName, regUsername, regEmail, regPhoneNo, regPassword, regPassword2;
-    Button already;
-    SubmitButton go;
-    ImageView image;
-    TextView logo;
-    TextView desc;
-    TextInputLayout txtf;
+    private TextInputLayout regName, regUsername, regEmail, regPhoneNo, regPassword, regPassword2;
+    private Button already;
+    private SubmitButton go;
+    private ImageView image;
+    private TextView logo, desc;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
 
 
 
@@ -57,14 +65,22 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (!validateEmail() | !validatePassword() | !validatePassword2()) { //validate fields
-                    return;
-                }
+                if (validateEmail()&&validatePassword()&&validatePassword2()) { //validate fields
+                    Toast.makeText(SignUp.this,"if came",Toast.LENGTH_LONG).show();
+                    firebaseAuth.createUserWithEmailAndPassword(regEmail.getEditText().getText().toString().trim(),regPassword.getEditText().getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                sendMail(); //for send the mail
+                                //Toast.makeText(SignUp.this,"email sent boss",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
 
-                Runnable r = new Runnable() {
-                    public void run() {
-                        Intent intent = new Intent(SignUp.this,Success.class);
-                        startActivity(new Intent(SignUp.this, Success.class));
+                    Runnable r = new Runnable() {
+                        public void run() {
+                            Intent intent = new Intent(SignUp.this,Login.class);
+                            startActivity(new Intent(SignUp.this, Login.class));
                         /*Pair[] pairs = new Pair[4];
                         pairs[0] = new Pair<View,String>(image, "logo_image");
                         pairs[1] = new Pair<View,String>(logo, "logo_text");
@@ -75,9 +91,12 @@ public class SignUp extends AppCompatActivity {
                             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SignUp.this,pairs);
                             startActivity(intent, options.toBundle());
                         }*/
-                    }
-                };
-                v.postDelayed(r, 3000);
+                        }
+                    };
+                    v.postDelayed(r, 3000);
+                }
+
+
 
             }
         });
@@ -192,11 +211,11 @@ public class SignUp extends AppCompatActivity {
         if (val.isEmpty()) {
             regPassword2.setError("Field cannot be empty");
             return false;
-        }/* else if (!val.matches(passwordVal)) {
+        } else if (!val.matches(passwordVal)) {
             regPassword2.setError("Password is too weak");
             return false;
-        }*/
-        else if(regPassword.getEditText().getText().toString().trim().equals(regPassword2.getEditText().getText().toString().trim()))
+        }
+        else if(!regPassword.getEditText().getText().toString().trim().equals(regPassword2.getEditText().getText().toString().trim()))
         {
            regPassword2.setError("Confirm password is not matching");
            return false;
@@ -218,6 +237,41 @@ public class SignUp extends AppCompatActivity {
         regEmail = findViewById(R.id.email);
         regPassword = findViewById(R.id.password2);
         regPassword2 = findViewById(R.id.password3);
+        firebaseAuth=FirebaseAuth.getInstance();
     }
+
+
+    private void sendMail(){
+        FirebaseUser fireuser=firebaseAuth.getCurrentUser();
+        if(fireuser!=null){
+            fireuser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Toast.makeText(SignUp.this,"Successfully registered, chaeck your Email",Toast.LENGTH_SHORT).show();
+                      //  senduserdata();
+                        firebaseAuth.signOut();
+                        finish();
+                       // startActivity(new Intent(SignUp.this,Login.class));
+                    }
+                    else{
+                        Toast.makeText(SignUp.this,"Verification Mail not sent",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    //add name age mail t databse using java class
+    private void senduserdata(){
+        firebaseDatabase=FirebaseDatabase.getInstance();
+       // userprofile up=new userprofile(regEmail.getEditText().getText().toString().trim(),name.getText().toString().trim(),url);
+      //  myref.setValue(up);
+
+
+
+    }
+
+
 }
 
