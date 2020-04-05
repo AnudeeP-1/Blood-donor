@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/dp"
-    tools:context=".Next"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:id="@+id/drawer_layout"
+    tools:openDrawer="start"
+    tools:context=".Next1">
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/nav_view"
+        android:layout_gravity="start"
         app:headerLayout="@layout/header"
-        app:menu="@menu/main_menu"
-        android:layout_gravity="start"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/main_menu" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -29,15 +30,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@android:drawable/btn_star"
         app:titleTextColor="#FFF" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

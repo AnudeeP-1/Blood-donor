@@ -58,7 +58,7 @@ public class VerifyPhone extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(VerifyPhone.this, Success.class);
-                Pair pairs[] = new Pair[5];
+                /*Pair pairs[] = new Pair[5];
                 pairs[0] = new Pair<View, String>(image, "logo_image");
                 pairs[1] = new Pair<View, String>(logoText, "logo_text");
                 pairs[2] = new Pair<View, String>(sloganText, "logo_text");
@@ -67,13 +67,13 @@ public class VerifyPhone extends AppCompatActivity {
 
                 if (android.os.Build.VERSION.SDK_INT >= 16) {
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(VerifyPhone.this, pairs);
-                    startActivity(intent, options.toBundle());
+                    */startActivity(intent/*, options.toBundle()*/);
                 }
 
                    // progressBar.setVisibility(View.VISIBLE);
 
 
-            }
+
         });
     }
     private void verifyCode(String verificationCode) {
@@ -92,7 +92,7 @@ public class VerifyPhone extends AppCompatActivity {
                             // Intent intent = new Intent(getApplicationContext(), Login.class);
                             //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             //startActivity(intent);
-                            startActivity(new Intent(VerifyPhone.this,Next.class));
+                            startActivity(new Intent(VerifyPhone.this,Success.class));
 
                         } else {
                             Toast.makeText(VerifyPhone.this,"something problem",Toast.LENGTH_LONG).show();
@@ -139,7 +139,8 @@ public class VerifyPhone extends AppCompatActivity {
                             //return;
                         }
                         progressBar.setVisibility(View.VISIBLE);
-                        verifyCode(manual_code);
+                        startActivity(new Intent(VerifyPhone.this,Success.class));
+                        /*verifyCode(manual_code);*/
                     }
 
                 }
