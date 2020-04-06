@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -22,6 +23,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_next1);
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -38,6 +40,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
     }
 
     @Override
@@ -52,16 +55,16 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.nav_home:
+                /*navigationView.setCheckedItem(R.id.nav_home);*/
                 break;
             case R.id.nav_profile:
                 Intent intent = new Intent (Next1.this,Profile.class);
                 startActivity(intent);
+                /*navigationView.setCheckedItem(R.id.nav_profile);*/
                 break;
         }
-
         return true;
     }
 

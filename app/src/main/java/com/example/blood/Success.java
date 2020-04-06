@@ -25,6 +25,6 @@ public class Success extends AppCompatActivity {
                 Intent intent = new Intent(Success.this,Next1.class);
                 startActivity(intent);
             }
-        },2000);
+        },1200);
     }
 }
