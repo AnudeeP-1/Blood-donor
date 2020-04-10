@@ -10,15 +10,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Next1 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
+    RelativeLayout donate,request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        donate=findViewById(R.id.donate);
+        request=findViewById(R.id.request);
 
         setSupportActionBar(toolbar);
 
@@ -38,8 +44,19 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
-
+        navigationView.setCheckedItem(R.id.nav_home);
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Recomonded popup
+            }
+        });
+        donate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Next1.this,Updateprofile.class));
+            }
+        });
 
     }
 
@@ -68,6 +85,13 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
                 Intent intent1 = new Intent (Next1.this,Updateprofile.class);
                 startActivity(intent1);
                 break;
+            case R.id.nav_logout:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(this,Login.class));
+                break;
+            case R.id.nav_search:
+                //Search popup
 
         }
         return true;

@@ -39,7 +39,7 @@ import static com.example.blood.R.layout.activity_login;
 
 public class Login extends AppCompatActivity {
 
-    Button emailsignup, phonesignup, login_btn;
+    Button emailsignup, phonesignup, login_btn,forgot;
     ImageView image;
     TextView logoText;
     TextView sloganText;
@@ -65,11 +65,11 @@ public class Login extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         id();      //findeViewById method called
-//        FirebaseUser user=firebaseAuth.getCurrentUser();
-//        if(user!=null){
-//            finish();
-//            startActivity(new Intent(this,Next.class));
-//        }
+        FirebaseUser user=firebaseAuth.getCurrentUser();
+       if(user!=null){
+            finish();
+           startActivity(new Intent(this,Next1.class));
+       }
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +78,12 @@ public class Login extends AppCompatActivity {
             }
         });
 
-
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               //popup for email password
+            }
+        });
 
         /*emailsignup.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -131,7 +136,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if((firebaseAuth.getCurrentUser())!= null){
-                    //startActivity(new Intent(Login.this,Next.class));
+                    startActivity(new Intent(Login.this,Next1.class));
 
                 }
             }
@@ -159,6 +164,7 @@ public class Login extends AppCompatActivity {
         login_btn = findViewById(R.id.login_btn);
         emailsignup = findViewById(R.id.emailsignup);
         phonesignup = findViewById(R.id.phonesignup);
+        forgot=findViewById(R.id.forgot);
         //googlesignup = findViewById(R.id.googlesignup);
         email=findViewById(R.id.loginemail);
         scrollView=findViewById(R.id.scroll);
@@ -207,7 +213,7 @@ public class Login extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed,
-                Toast.makeText(Login.this,"auth went wrong12",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this,"Authentication went wrong",Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -99,6 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#CE0CA602"
+                android:id="@+id/donate"
                 >
 
                 <TextView
@@ -132,6 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#CE0CA602"
+                android:id="@+id/request"
                 >
 
                 <TextView

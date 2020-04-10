@@ -27,6 +27,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:id="@+id/dattha"
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.Toolbar
@@ -72,10 +73,11 @@
                         android:layout_toRightOf="@+id/profile_image"
                         android:fontFamily="@font/bungee"
                         android:includeFontPadding="true"
-                        android:text="Select the image"
+                        android:text="Profile Photo"
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/click"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/full_name"
@@ -83,7 +85,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@+id/profile_image"
                         android:includeFontPadding="false"
-                        android:text="Select image to upload"
+                        android:text="click here to select image "
                         android:textSize="14sp" />
                 </RelativeLayout>
 
@@ -130,17 +132,21 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/upgender"
+                    android:id="@+id/gender"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter your gender"
                     android:transitionName="email_trans">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <Spinner
+                        android:id="@+id/upgender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textCapCharacters" />
+                        android:layout_gravity="center"
+                        android:entries="@array/grnder"
+                        android:padding="20dp"
+                        android:prompt="@string/gender_prompt" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -169,22 +175,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text" />
+
+                    <Spinner
+                        android:id="@+id/upblood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:entries="@array/blood_groups"
+                        android:padding="20dp"
+                        android:prompt="@string/blood_prompt" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:entries="@array/blood_groups"
-                    android:padding="20dp"
-                    android:prompt="@string/blood_prompt" />
-
                 <Button
+                    android:id="@+id/donate"
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="choose the blood group" />
+                    android:text="DONATE" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
