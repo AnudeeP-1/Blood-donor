@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -79,8 +81,19 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         try {
             firebaseStorage.getReference(FirebaseAuth.getInstance().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).fit().centerCrop().into(profile);
+                public void onSuccess(final Uri uri) {
+                    Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(uri).fit().centerCrop().into(profile);
+                        }
+                    });
+
 
                 }
             });
@@ -125,6 +138,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
            startActivity(new Intent(Profile.this,Next1.class));
        }
             DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+            firebaseDatabase.keepSynced(true);
             firebaseDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

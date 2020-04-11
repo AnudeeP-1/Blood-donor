@@ -3,9 +3,10 @@
     android:layout_marginTop="4dp"
     android:paddingBottom="8dp"
     android:layout_width="match_parent"
+    android:background="@color/cardview_shadow_start_color"
     android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageVie
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/list_dp"
         android:layout_width="140dp"
         android:layout_height="140dp"
@@ -13,80 +14,136 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="17dp" />
 
     <TextView
         android:id="@+id/list_name"
+        style="@style/Base.CardView"
         android:layout_width="221dp"
+        android:textColor=""
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp" />
+        android:layout_marginRight="17dp"
+        android:layout_toEndOf="@+id/list_dp"
+        android:layout_toRightOf="@+id/list_dp"
+        android:fontFamily="@font/aclonica"
+
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/list_phone"
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="18dp"
+
         android:layout_width="221dp"
+
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="29dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp" />
+        android:layout_marginRight="17dp"
+        android:layout_toEndOf="@+id/list_dp"
+        android:layout_toRightOf="@+id/list_dp" />
 
     <TextView
         android:id="@+id/list_email"
         android:layout_width="221dp"
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="14dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="55dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp" />
+        android:layout_marginRight="17dp"
+        android:layout_toEndOf="@+id/list_dp"
+        android:layout_toRightOf="@+id/list_dp" />
 
     <TextView
+
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="18dp"
         android:id="@+id/list_age"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp" />
+        android:layout_marginRight="17dp"
+        android:layout_toEndOf="@+id/list_dp"
+        android:layout_toRightOf="@+id/list_dp" />
 
     <TextView
+
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="18dp"
         android:id="@+id/list_gender"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="106dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp" />
+        android:layout_marginRight="17dp"
+        android:layout_toEndOf="@+id/list_dp"
+        android:layout_toRightOf="@+id/list_dp" />
 
     <TextView
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="18dp"
         android:id="@+id/list_blood"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="133dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp" />
+        android:layout_marginRight="17dp"
+        android:layout_toEndOf="@+id/list_dp"
+        android:layout_toRightOf="@+id/list_dp" />
 
 
     <TextView
         android:id="@+id/list_adress_fixed"
         android:layout_width="364dp"
+
+        android:fontFamily="@font/aclonica"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -101,6 +158,11 @@
         android:textStyle="bold" />
 
     <TextView
+        android:gravity="center"
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="18dp"
         android:id="@+id/list_adress"
         android:layout_width="364dp"
         android:layout_height="wrap_content"
@@ -112,6 +174,11 @@
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp" />
     <TextView
+        android:gravity="center"
+        style="@style/Base.CardView"
+        android:fontFamily="@font/aclonica"
+        android:textStyle="bold"
+        android:textSize="18dp"
         android:id="@+id/userID"
         android:layout_width="364dp"
         android:layout_height="wrap_content"

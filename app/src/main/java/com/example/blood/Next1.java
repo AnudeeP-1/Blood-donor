@@ -54,7 +54,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Next1.this,Updateprofile.class));
+                startActivity(new Intent(Next1.this,List_Of_Users.class));
             }
         });
 

@@ -1,8 +1,10 @@
 package com.example.blood;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +15,10 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.annotations.NotNull;
 import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class List_Of_Users extends AppCompatActivity {
@@ -32,27 +37,25 @@ public class List_Of_Users extends AppCompatActivity {
         adapter=new FirebaseListAdapter(options) {
             @Override
             protected void populateView(View v, Object model, int position) {
-                TextView name=findViewById(R.id.list_name);
-                TextView phone=findViewById(R.id.list_phone);
-                TextView age=findViewById(R.id.list_age);
-                TextView gender=findViewById(R.id.list_gender);
-                TextView adress=findViewById(R.id.list_adress);
-                TextView blood=findViewById(R.id.list_blood);
-                TextView userID=findViewById(R.id.userID);
-                de.hdodenhof.circleimageview.CircleImageView
-                        dp=findViewById(R.id.list_dp);
-                TextView email=findViewById(R.id.list_email);
+                TextView name=v.findViewById(R.id.list_name);
+                TextView phone=v.findViewById(R.id.list_phone);
+                TextView age=v.findViewById(R.id.list_age);
+                TextView gender=v.findViewById(R.id.list_gender);
+                TextView adress=v.findViewById(R.id.list_adress);
+                TextView blood=v.findViewById(R.id.list_blood);
+                TextView userID=v.findViewById(R.id.userID);
+                ImageView prof=v.findViewById(R.id.list_dp);
+                TextView email=v.findViewById(R.id.list_email);
                 user_information users=(user_information)model;
                 //calculation part if user is pressed near by options
-
-                Picasso.get().load(users.getUrl()).fit().into(dp);
-                name.setText(users.getName());
+                Picasso.get().load(users.getUrl()).into(prof);
+                name.setText("Name:"+users.getName());
                 adress.setText(users.getAdress());
                 email.setText(users.getEmail());
                 phone.setText(users.getPhone());
-                age.setText(users.getAge());
-                gender.setText(users.getGender());
-                blood.setText(users.getBlood());
+                age.setText("Age:"+users.getAge());
+                gender.setText("Gender:"+users.getGender());
+                blood.setText("Blood Group:"+users.getBlood());
                 userID.setText(users.getUserid());
 
 
