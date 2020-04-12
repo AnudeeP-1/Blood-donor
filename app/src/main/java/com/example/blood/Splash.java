@@ -44,7 +44,7 @@ public class Splash extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void run(){
-                Intent intent = new Intent(Splash.this,Login.class);
+                Intent intent = new Intent(Splash.this,Next1.class);
                 Pair[] pairs = new Pair[2];
                 pairs[0] = new Pair<View,String>(image, "logo_image");
                 pairs[1] = new Pair<View,String>(logo, "logo_text");

@@ -306,6 +306,12 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             case R.id.nav_guidlines:
                 startActivity(new Intent(this,Updateprofile.class));
                 break;
+            case R.id.nav_search:
+                //Search popup
+                Intent intent2=new Intent(getApplicationContext(),Search_popup.class);
+
+                startActivity(intent2);
+
 
         }
         return true;

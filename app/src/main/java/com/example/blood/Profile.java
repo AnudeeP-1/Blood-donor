@@ -212,6 +212,12 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                 finish();
                 startActivity(new Intent(this,Login.class));
                 break;
+            case R.id.nav_search:
+                //Search popup
+                Intent intent2=new Intent(getApplicationContext(),Search_popup.class);
+
+                startActivity(intent2);
+
         }
 
         return true;

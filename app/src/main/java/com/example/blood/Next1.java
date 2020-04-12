@@ -7,12 +7,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +27,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
     NavigationView navigationView;
     Toolbar toolbar;
     RelativeLayout donate,request;
+    Button hello,close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +54,17 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
             @Override
             public void onClick(View v) {
                 //Recomonded popup
+               // MyCustomAlertDialog();
+                recomended();
+
             }
         });
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Next1.this,List_Of_Users.class));
+              //  startActivity(new Intent(Next1.this,List_Of_Users.class));
+                email();
+
             }
         });
 
@@ -92,9 +102,103 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
                 break;
             case R.id.nav_search:
                 //Search popup
+                    search();
 
         }
         return true;
     }
+    public void email(){
+        final Dialog MyDialog = new Dialog(Next1.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.activity_email_popup);
 
+        hello = (Button)MyDialog.findViewById(R.id.hello);
+        close = (Button)MyDialog.findViewById(R.id.close);
+
+        hello.setEnabled(true);
+        close.setEnabled(true);
+
+        hello.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
+                // Intent intent=new Intent(getApplicationContext(),search.class);
+
+                // startActivity(intent);
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialog.cancel();
+            }
+        });
+
+        MyDialog.show();
+    }
+
+    public void recomended(){
+        final Dialog MyDialog = new Dialog(Next1.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.activity_recomended);
+
+        hello = (Button)MyDialog.findViewById(R.id.hello);
+        close = (Button)MyDialog.findViewById(R.id.close);
+
+        hello.setEnabled(true);
+        close.setEnabled(true);
+
+        hello.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
+                //  Intent intent=new Intent(getApplicationContext(),search.class);
+
+                //  startActivity(intent);
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialog.cancel();
+            }
+        });
+
+        MyDialog.show();
+    }
+    public void search(){
+        final Dialog MyDialog = new Dialog(Next1.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.activity_search_popup);
+
+        hello = (Button)MyDialog.findViewById(R.id.hello);
+        close = (Button)MyDialog.findViewById(R.id.close);
+
+        hello.setEnabled(true);
+        close.setEnabled(true);
+
+        hello.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
+                //  Intent intent=new Intent(getApplicationContext(),Search_popup.class);
+
+                //   startActivity(intent);
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialog.cancel();
+            }
+        });
+
+        MyDialog.show();
+    }
 }
