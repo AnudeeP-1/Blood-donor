@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,7 +45,7 @@ public class Splash extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void run(){
-                Intent intent = new Intent(Splash.this,Next1.class);
+                Intent intent = new Intent(Splash.this, Login.class);
                 Pair[] pairs = new Pair[2];
                 pairs[0] = new Pair<View,String>(image, "logo_image");
                 pairs[1] = new Pair<View,String>(logo, "logo_text");

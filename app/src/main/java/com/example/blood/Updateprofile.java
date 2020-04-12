@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,8 +20,10 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,13 +44,19 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+import java.net.URL;
 
 public class Updateprofile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     Toolbar toolbar;
+    String url;
     ProgressDialog load;
     DrawerLayout drawerLayout;
+    Button hello,close;
     private ConstraintLayout constraintLayout;
     NavigationView navigationView;
     private TextView clickhere;
@@ -99,20 +108,14 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
     private void display(){
         try {
-            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-            firebaseStorage.getReference(FirebaseAuth.getInstance().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).fit().centerCrop().into(dp);
 
-                }
-            });
             DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+            firebaseDatabase.keepSynced(true);
             firebaseDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try{
-                    user_information user = dataSnapshot.getValue(user_information.class);
+                    final user_information user = dataSnapshot.getValue(user_information.class);
                     name.getEditText().setText(user.getName());
 
                     for(int i=0;i<blood.getCount();i++){
@@ -122,6 +125,19 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                         }
 
                     }
+                    url=user.getUrl();
+                        Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(dp, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        Picasso.get().load(user.getUrl()).fit().centerCrop().into(dp);
+                                    }
+                                });
+                    Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
                     age.getEditText().setText(user.getAge());
                     email.getEditText().setText(user.getEmail());
                     phone.getEditText().setText(user.getPhone());
@@ -143,6 +159,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             });
         }
         catch(Exception e){alertDialog.dismiss();}
+        flag=1;
     }
 
     private boolean validate() {
@@ -189,34 +206,57 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
 
     private void add_data(){
-        final DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
-        final StorageReference storageReference= FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
-        UploadTask uploadTask=storageReference.putFile(imagepath);
-        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                alertDialog.show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        if(imagepath!=null) {
+            try {
+                //for online mode
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+                databaseReference.keepSynced(true);
+                final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
+
+                UploadTask uploadTask = storageReference.putFile(imagepath);
+
+                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onSuccess(Uri uri) {
-                        String url=String.valueOf(uri);
-                        //name,url,age,blood,phone,email,userid,gender,adress
-                        user_information user_information=new user_information(name.getEditText().getText().toString(),url,age.getEditText().getText().toString(),blood.getSelectedItem().toString(),phone.getEditText().getText().toString(),email.getEditText().getText().toString(),FirebaseAuth.getInstance().getUid().toString(),gender.getSelectedItem().toString(),adress.getEditText().getText().toString());
-                        databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                        alertDialog.show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                alertDialog.dismiss();
-                                Snackbar.make(constraintLayout,"Succesfully Registered",Snackbar.LENGTH_LONG).show();
+                            public void onSuccess(Uri uri) {
+                                url = String.valueOf(uri);
+                                //function call for getting lat and long
+
+                                //name,url,age,blood,phone,email,userid,gender,adress   here add long and lat at last
+                                user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString());
+                                databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        alertDialog.dismiss();
+                                        Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
                             }
                         });
                     }
                 });
-            }
-        });
+            }catch (Exception e){Toast.makeText(Updateprofile.this,"Check you have proper internet connection",Toast.LENGTH_LONG).show();}
+        }
+        else{
+            //if image is not selected for second time in offline mode
+            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+            databaseReference.keepSynced(true);
+            user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString());
+            databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    alertDialog.dismiss();
+                    Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
 
@@ -308,9 +348,36 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 break;
             case R.id.nav_search:
                 //Search popup
-                Intent intent2=new Intent(getApplicationContext(),Search_popup.class);
+                final Dialog MyDialog = new Dialog(Updateprofile.this);
+                MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                MyDialog.setContentView(R.layout.activity_search_popup);
 
-                startActivity(intent2);
+                hello = (Button)MyDialog.findViewById(R.id.hello);
+                close = (Button)MyDialog.findViewById(R.id.close);
+
+                hello.setEnabled(true);
+                close.setEnabled(true);
+
+                hello.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(getApplicationContext(),Search_popup.class);
+                        EditText text=MyDialog.findViewById(R.id.edittext);
+
+                        intent.putExtra("userID",text.getText().toString().trim());
+
+                        startActivity(intent);
+
+                    }
+                });
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyDialog.cancel();
+                    }
+                });
+
+                MyDialog.show();
 
 
         }

@@ -5,13 +5,16 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -39,7 +42,7 @@ import static com.example.blood.R.layout.activity_login;
 
 public class Login extends AppCompatActivity {
 
-    Button emailsignup, phonesignup, login_btn,forgot;
+    Button emailsignup, phonesignup, login_btn,forgot,hello,close;
     ImageView image;
     TextView logoText;
     TextView sloganText;
@@ -82,9 +85,52 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                //popup for email password
-             //   Intent intent2=new Intent(getApplicationContext(),Email_popup.class);
+                final Dialog MyDialog = new Dialog(Login.this);
+                MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                MyDialog.setContentView(R.layout.activity_email_popup);
 
-             //   startActivity(intent2);
+                hello = (Button)MyDialog.findViewById(R.id.hello);
+                close = (Button)MyDialog.findViewById(R.id.close);
+
+                hello.setEnabled(true);
+                close.setEnabled(true);
+
+                hello.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                       EditText resetmail=MyDialog.findViewById(R.id.edittext);
+                        firebaseAuth=FirebaseAuth.getInstance();
+                                if(resetmail.getText().toString().isEmpty())
+
+                                    Toast.makeText(getApplicationContext(),"Enter the mail",Toast.LENGTH_LONG).show();
+                                else{
+                                    firebaseAuth.sendPasswordResetEmail(resetmail.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                Toast.makeText(getApplicationContext(),"link sent to mail",Toast.LENGTH_LONG).show();
+
+                                                MyDialog.dismiss();
+                                            }
+                                            else Toast.makeText(getApplicationContext(),"Invalid email",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+
+
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyDialog.cancel();
+                    }
+                });
+
+                MyDialog.show();
 
             }
         });
@@ -146,7 +192,7 @@ public class Login extends AppCompatActivity {
             }
         };
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-               // .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -185,7 +231,7 @@ public class Login extends AppCompatActivity {
                     Boolean emailflag=fireuser.isEmailVerified();
                     if(emailflag){
                         finish();
-                        startActivity(new Intent(Login.this,Next.class));
+                        startActivity(new Intent(Login.this,Next1.class));
                     }
                     else{
                         Snackbar.make(scrollView,"Verify email",Snackbar.LENGTH_LONG).show();

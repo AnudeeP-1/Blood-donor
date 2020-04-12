@@ -16,6 +16,8 @@ import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.annotations.NotNull;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,7 +31,7 @@ public class List_Of_Users extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list__of__users);
         lv=findViewById(R.id.list_view);
-        Query query= FirebaseDatabase.getInstance().getReference();
+        Query query= FirebaseDatabase.getInstance().getReference().orderByChild("blood").equalTo("O+");
         FirebaseListOptions<user_information> options=new FirebaseListOptions.Builder<user_information>()
                 .setLifecycleOwner(this)
                 .setLayout(R.layout.user_list)
@@ -44,11 +46,21 @@ public class List_Of_Users extends AppCompatActivity {
                 TextView adress=v.findViewById(R.id.list_adress);
                 TextView blood=v.findViewById(R.id.list_blood);
                 TextView userID=v.findViewById(R.id.userID);
-                ImageView prof=v.findViewById(R.id.list_dp);
+                final ImageView prof=v.findViewById(R.id.list_dp);
                 TextView email=v.findViewById(R.id.list_email);
-                user_information users=(user_information)model;
+                final user_information users=(user_information)model;
                 //calculation part if user is pressed near by options
-                Picasso.get().load(users.getUrl()).into(prof);
+                Picasso.get().load(users.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(prof, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(users.getUrl()).into(prof);
+                    }
+                });
                 name.setText("Name:"+users.getName());
                 adress.setText(users.getAdress());
                 email.setText(users.getEmail());

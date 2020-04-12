@@ -37,7 +37,7 @@
             android:noHistory="true" />
         <activity
             android:name=".VerifyPhone"
-            android:noHistory="true" />
+            android:noHistory="false" />
         <activity
             android:name=".SignUp"
             android:noHistory="true" />

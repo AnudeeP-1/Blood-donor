@@ -8,13 +8,17 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +44,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     NavigationView navigationView;
     Toolbar toolbar;
     ImageView profile;
+    Button hello,close;
     TextView name,phone,email,blood,Age,Gender,Adress,text;
     AlertDialog alertDialog;
     AlertDialog.Builder builder;
@@ -66,6 +71,12 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             display();//for current user
         }
         else{
+            if(check.isEmpty()) {
+                alertDialog.dismiss();
+                Toast.makeText(this, "Enter valid user ID u have recieved", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this,Next1.class));
+            }
+            else
             display1(check);
         }
 
@@ -78,30 +89,53 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     private void display1(String id){
 
         FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
-        try {
-            firebaseStorage.getReference(FirebaseAuth.getInstance().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(final Uri uri) {
-                    Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            Picasso.get().load(uri).fit().centerCrop().into(profile);
-                        }
-                    });
-
-
-                }
-            });
+try{
+//            firebaseStorage.getReference(FirebaseAuth.getInstance().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                @Override
+//                public void onSuccess(final Uri uri) {
+//                    Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
+//                        @Override
+//                        public void onSuccess() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(Exception e) {
+//                            Picasso.get().load(uri).fit().centerCrop().into(profile);
+//                        }
+//                    });
+//
+//
+//                }
+//            });
             DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference(id);
+            firebaseDatabase.keepSynced(true);
             firebaseDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    user_information user = dataSnapshot.getValue(user_information.class);
+                    try {
+                       user_information user = dataSnapshot.getValue(user_information.class);
+                    }catch(Exception e){
+                        alertDialog.dismiss();
+                        finish();
+                        Toast.makeText(Profile.this,"User doesn't have profile",Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(Profile.this,Next1.class));
+                        }
+                    final user_information user=dataSnapshot.getValue(user_information.class);
+                    try {
+                        Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(user.getUrl()).fit().centerCrop().into(profile);
+                            }
+                        });
+
+
                     name.setText(user.getName());
                     blood.setText(user.getBlood());
                     Age.setText(user.getAge());
@@ -110,6 +144,11 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                     Adress.setText(user.getAdress());
                     Gender.setText(user.getGender());
                     alertDialog.dismiss();
+                    }catch (Exception e){alertDialog.dismiss();
+                        finish();
+                        Toast.makeText(Profile.this,"User doesn't have profile",Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(Profile.this,Next1.class));
+                    }
                 }
 
                 @Override
@@ -117,9 +156,12 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                     Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-        }catch(Exception e){Toast.makeText(this,"User doesn't have profile",Toast.LENGTH_LONG).show();
+    }catch (Exception e){alertDialog.dismiss();
+        finish();
+        Toast.makeText(Profile.this,"User doesn't have profile",Toast.LENGTH_LONG).show();
         startActivity(new Intent(Profile.this,Next1.class));
-        }
+    }
+
 
     }
 
@@ -143,7 +185,18 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try{
-                    user_information user = dataSnapshot.getValue(user_information.class);
+                    final user_information user = dataSnapshot.getValue(user_information.class);
+                    Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(user.getUrl()).into(profile);
+                        }
+                    });
                     name.setText(user.getName());
                     blood.setText(user.getBlood());
                     Age.setText(user.getAge());
@@ -213,10 +266,38 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                 startActivity(new Intent(this,Login.class));
                 break;
             case R.id.nav_search:
-                //Search popup
-                Intent intent2=new Intent(getApplicationContext(),Search_popup.class);
+                final Dialog MyDialog = new Dialog(Profile.this);
+                MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                MyDialog.setContentView(R.layout.activity_search_popup);
 
-                startActivity(intent2);
+                hello = (Button)MyDialog.findViewById(R.id.hello);
+                close = (Button)MyDialog.findViewById(R.id.close);
+
+                hello.setEnabled(true);
+                close.setEnabled(true);
+
+                hello.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                         Intent intent=new Intent(getApplicationContext(),Search_popup.class);
+                        EditText text=MyDialog.findViewById(R.id.edittext);
+
+                        intent.putExtra("userID",text.getText().toString().trim());
+
+                        startActivity(intent);
+
+                    }
+                });
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyDialog.cancel();
+                    }
+                });
+
+                MyDialog.show();
+               break;
 
         }
 

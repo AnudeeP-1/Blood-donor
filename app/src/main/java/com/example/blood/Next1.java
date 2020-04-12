@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -62,8 +63,8 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  startActivity(new Intent(Next1.this,List_Of_Users.class));
-                email();
+              startActivity(new Intent(Next1.this,List_Of_Users.class));
+
 
             }
         });
@@ -107,37 +108,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         }
         return true;
     }
-    public void email(){
-        final Dialog MyDialog = new Dialog(Next1.this);
-        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        MyDialog.setContentView(R.layout.activity_email_popup);
 
-        hello = (Button)MyDialog.findViewById(R.id.hello);
-        close = (Button)MyDialog.findViewById(R.id.close);
-
-        hello.setEnabled(true);
-        close.setEnabled(true);
-
-        hello.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
-                // Intent intent=new Intent(getApplicationContext(),search.class);
-
-                // startActivity(intent);
-
-            }
-        });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyDialog.cancel();
-            }
-        });
-
-        MyDialog.show();
-    }
 
     public void recomended(){
         final Dialog MyDialog = new Dialog(Next1.this);
@@ -184,11 +155,12 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
         hello.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+ Intent intent=new Intent(getApplicationContext(),Profile.class);
+                EditText text=MyDialog.findViewById(R.id.edittext);
 
-                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
-                //  Intent intent=new Intent(getApplicationContext(),Search_popup.class);
+                 intent.putExtra("userID",text.getText().toString().trim());
 
-                //   startActivity(intent);
+                  startActivity(intent);
 
             }
         });

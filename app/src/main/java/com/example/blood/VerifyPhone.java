@@ -57,7 +57,18 @@ public class VerifyPhone extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VerifyPhone.this, Success.class);
+
+                    String manual_code = otp.getEditText().getText().toString().trim();
+
+                    if (manual_code.isEmpty() || manual_code.length() < 6) {
+                        otp.setError("Wrong OTP...");
+                        otp.requestFocus();
+                        //return;
+                    }
+                    progressBar.setVisibility(View.VISIBLE);
+                    //startActivity(new Intent(VerifyPhone.this,Success.class));
+                    verifyCode(manual_code);
+               // Intent intent = new Intent(VerifyPhone.this, Success.class);
                 /*Pair pairs[] = new Pair[5];
                 pairs[0] = new Pair<View, String>(image, "logo_image");
                 pairs[1] = new Pair<View, String>(logoText, "logo_text");
@@ -67,7 +78,7 @@ public class VerifyPhone extends AppCompatActivity {
 
                 if (android.os.Build.VERSION.SDK_INT >= 16) {
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(VerifyPhone.this, pairs);
-                    */startActivity(intent/*, options.toBundle()*/);
+                    *///startActivity(intent/*, options.toBundle()*/);
                 }
 
                    // progressBar.setVisibility(View.VISIBLE);
@@ -95,15 +106,13 @@ public class VerifyPhone extends AppCompatActivity {
                             startActivity(new Intent(VerifyPhone.this,Success.class));
 
                         } else {
-                            Toast.makeText(VerifyPhone.this,"something problem",Toast.LENGTH_LONG).show();
-                            Toast.makeText(VerifyPhone.this, task.getException().getMessage().toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(VerifyPhone.this,"Something went wrong..\nCheck your internet",Toast.LENGTH_LONG).show();
+                           // Toast.makeText(VerifyPhone.this, task.getException().getMessage().toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
     private void sendVerificationCodeToUser(String Phoneverify) {
-        Toast.makeText(VerifyPhone.this,"109", Toast.LENGTH_SHORT).show();
-
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 "+91"+Phoneverify,        // Phone number to verify
                 60,                 // Timeout duration
@@ -117,9 +126,7 @@ public class VerifyPhone extends AppCompatActivity {
                 public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
                     //Get the code in global variable
-                    Toast.makeText(VerifyPhone.this,"122", Toast.LENGTH_SHORT).show();
-
-                    verificationCodeBySystem = s;
+                   verificationCodeBySystem = s;
                 }
                 @Override
                 public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
@@ -130,18 +137,7 @@ public class VerifyPhone extends AppCompatActivity {
                         progressBar.setVisibility(View.VISIBLE);
                         verifyCode(code);
                     }
-                    else{
-                        String manual_code = otp.getEditText().getText().toString().trim();
 
-                        if (code.isEmpty() || code.length() < 6) {
-                            otp.setError("Wrong OTP...");
-                            otp.requestFocus();
-                            //return;
-                        }
-                        progressBar.setVisibility(View.VISIBLE);
-                        startActivity(new Intent(VerifyPhone.this,Success.class));
-                        /*verifyCode(manual_code);*/
-                    }
 
                 }
                 @Override
