@@ -42,6 +42,8 @@ import static com.example.blood.R.layout.activity_login;
 
 public class Login extends AppCompatActivity {
 
+
+
     Button emailsignup, phonesignup, login_btn,forgot,hello,close;
     ImageView image;
     TextView logoText;

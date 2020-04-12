@@ -6,16 +6,24 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,6 +37,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -69,6 +81,15 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     private static int PICK_IMAGE = 123;// for image loading purpose
     Uri imagepath;
     int flag=0;
+
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    private ResultReceiver resultReceiver;
+    public double lattitude,longitude;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+    private FirebaseAuth mAuth;
+    Users users;
 
 
 
@@ -227,7 +248,19 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                             @Override
                             public void onSuccess(Uri uri) {
                                 url = String.valueOf(uri);
+
                                 //function call for getting lat and long
+
+                                // TO GET REQUIREDPERMISSION for the first time  OR  to check whether the permission is been given
+                                if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                        != PackageManager.PERMISSION_GRANTED){
+                                    ActivityCompat.requestPermissions(Updateprofile.this,
+                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            REQUEST_CODE_LOCATION_PERMISSION);
+
+                                }else{
+                                    getCurrentLocation();
+                                }
 
                                 //name,url,age,blood,phone,email,userid,gender,adress   here add long and lat at last
                                 user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString());
@@ -258,7 +291,71 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             });
         }
     }
+    //LOCATION DU permission sec time (Ie if permission denied for the first time)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length>0){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getCurrentLocation();
+            }else{
+                new AlertDialog.Builder(Updateprofile.this){}
+                        .setTitle("GIVE ACCESS!!")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                        != PackageManager.PERMISSION_GRANTED){
+                                    ActivityCompat.requestPermissions(Updateprofile.this,
+                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            REQUEST_CODE_LOCATION_PERMISSION);
+                                }
+                            }
+                        })
+                        .setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // no activity to be done
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        }
+    }
 
+    //getting current location
+    private void getCurrentLocation() {
+        final LocationRequest locationrequest = new LocationRequest();
+        // locationrequest.setInterval(10000);
+        //  locationrequest.setFastestInterval(3000);
+        locationrequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationServices.getFusedLocationProviderClient(Updateprofile.this)
+                .requestLocationUpdates(locationrequest,new LocationCallback(){
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        super.onLocationResult(locationResult);
+                        LocationServices.getFusedLocationProviderClient(Updateprofile.this)
+                                .removeLocationUpdates(this);
+                        if(locationResult!= null && locationResult.getLocations().size() > 0){
+                            int latestlocationindex = locationResult.getLocations().size() - 1;
+                            lattitude = locationResult.getLocations().get(latestlocationindex).getLatitude();
+                            longitude = locationResult.getLocations().get(latestlocationindex).getLongitude();
+
+                            //STORING TO DATABASE (WITH CHILD....)
+                            users = new Users();
+                            DatabaseReference reff;
+                            reff= FirebaseDatabase.getInstance().getReference(mAuth.getUid());
+                            users.setLatti((Double.toString(lattitude)));
+                            users.setLongi((Double.toString(longitude)));
+                            reff.setValue(users);
+                        }
+                        else{
+                            Toast.makeText(Updateprofile.this,"loading!!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, Looper.getMainLooper());
+    }
 
     private void id(){
         drawerLayout = findViewById(R.id.drawer_layout);
