@@ -1,6 +1,7 @@
 package com.example.blood;
 
 public class user_information {
+    private String latti,longi;
     public String getName() {
         return name;
     }
@@ -71,6 +72,21 @@ public class user_information {
 
     public void setAdress(String adress) {
         this.adress = adress;
+    }
+    public String getLatti() {
+        return latti;
+    }
+
+    public void setLatti(String latti) {
+        this.latti = latti;
+    }
+
+    public String getLongi() {
+        return longi;
+    }
+
+    public void setLongi(String longi) {
+        this.longi = longi;
     }
 
     public user_information() {

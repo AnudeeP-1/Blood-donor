@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
@@ -89,7 +90,6 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     private FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     private FirebaseAuth mAuth;
-    Users users;
 
 
 
@@ -125,6 +125,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 }
             }
         });
+
     }
 
     private void display(){
@@ -220,7 +221,6 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         }
         else adress.setErrorEnabled(false);
 
-
         //function to validate this
         return true;
     }
@@ -250,6 +250,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                                 url = String.valueOf(uri);
 
                                 //function call for getting lat and long
+                                permission();
 
                                 // TO GET REQUIREDPERMISSION for the first time  OR  to check whether the permission is been given
                                 if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -291,6 +292,8 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             });
         }
     }
+
+    public void permission(){}
     //LOCATION DU permission sec time (Ie if permission denied for the first time)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -312,51 +315,11 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                                 }
                             }
                         })
-                        .setNegativeButton("cancel",new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // no activity to be done
-                            }
-                        })
                         .create()
                         .show();
             }
         }
     }
-
-    //getting current location
-    private void getCurrentLocation() {
-        final LocationRequest locationrequest = new LocationRequest();
-        // locationrequest.setInterval(10000);
-        //  locationrequest.setFastestInterval(3000);
-        locationrequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationServices.getFusedLocationProviderClient(Updateprofile.this)
-                .requestLocationUpdates(locationrequest,new LocationCallback(){
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(Updateprofile.this)
-                                .removeLocationUpdates(this);
-                        if(locationResult!= null && locationResult.getLocations().size() > 0){
-                            int latestlocationindex = locationResult.getLocations().size() - 1;
-                            lattitude = locationResult.getLocations().get(latestlocationindex).getLatitude();
-                            longitude = locationResult.getLocations().get(latestlocationindex).getLongitude();
-
-                            //STORING TO DATABASE (WITH CHILD....)
-                            users = new Users();
-                            DatabaseReference reff;
-                            reff= FirebaseDatabase.getInstance().getReference(mAuth.getUid());
-                            users.setLatti((Double.toString(lattitude)));
-                            users.setLongi((Double.toString(longitude)));
-                            reff.setValue(users);
-                        }
-                        else{
-                            Toast.makeText(Updateprofile.this,"loading!!",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, Looper.getMainLooper());
-    }
-
     private void id(){
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -377,12 +340,72 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         LayoutInflater inflater=Updateprofile.this.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.loading_bar,null));
         builder.setCancelable(false);
-
         alertDialog=builder.create();
 
-
-
     }
+
+    //getting current location
+    private void getCurrentLocation() {
+        final LocationRequest locationrequest = new LocationRequest();
+        locationrequest.setInterval(10000);
+        locationrequest.setFastestInterval(3000);
+        locationrequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationServices.getFusedLocationProviderClient(Updateprofile.this)
+                .requestLocationUpdates(locationrequest,new LocationCallback(){
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        super.onLocationResult(locationResult);
+                        LocationServices.getFusedLocationProviderClient(Updateprofile.this)
+                                .removeLocationUpdates(this);
+                        if(locationResult!= null && locationResult.getLocations().size() > 0){
+                            int latestlocationindex = locationResult.getLocations().size() - 1;
+                            lattitude = locationResult.getLocations().get(latestlocationindex).getLatitude();
+                            longitude = locationResult.getLocations().get(latestlocationindex).getLongitude();
+
+                            //STORING TO DATABASE (WITH CHILD....)
+                            user_information ui =new user_information();
+                            DatabaseReference reff;
+                            reff= FirebaseDatabase.getInstance().getReference(mAuth.getUid());
+                            ui.setLatti((Double.toString(lattitude)));
+                            ui.setLongi((Double.toString(longitude)));
+                            reff.setValue(ui);
+
+                            Location location = new Location("providerNA");
+                            location.setLatitude(lattitude);
+                            location.setLongitude(longitude);
+                            fetchAddressFromLatLong(location);
+                        }
+                        else{
+                            Toast.makeText(Updateprofile.this,"loading!!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, Looper.getMainLooper());
+    }
+    private void fetchAddressFromLatLong(Location location) {
+        Intent intent =new Intent(this,FetchAddressIntentServices.class);
+        intent.putExtra(constants.RECEIVER,resultReceiver);
+        intent.putExtra(constants.LOCATION_DATA_EXTRA,location);
+        startService(intent);
+    }
+
+    private class AddressResultReceiver extends ResultReceiver{
+        AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            if(resultCode == constants.SUCCESS_RESULT){
+                String temp =(resultData.getString(constants.RESULT_DATA_KEY));
+                //TEMP ALLI ADDRESS EDE
+            }
+            else{
+                Toast.makeText(Updateprofile.this,resultData.getString(constants.RESULT_DATA_KEY),Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
 
     @Override
