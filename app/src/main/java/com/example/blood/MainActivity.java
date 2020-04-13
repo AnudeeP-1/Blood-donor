@@ -16,32 +16,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        new Handler().postDelayed(new Runnable(){
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void run(){
+                Intent intent = new Intent(MainActivity.this, Splash.class);
+                //Pair[] pairs = new Pair[2];
+                //pairs[0] = new Pair<View,String>(image, "logo_image");
+                //pairs[1] = new Pair<View,String>(logo, "logo_text");
+                startActivity(intent);
 
-
-        startActivity(new Intent(MainActivity.this,Next1.class));
-        //DELETE ABOVE LINE
-
-//
-//
-//
-//        new Handler().postDelayed(new Runnable(){
-//
-//            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//            @Override
-//            public void run(){
-//                Intent intent = new Intent(MainActivity.this, Splash.class);
-//                //Pair[] pairs = new Pair[2];
-//                //pairs[0] = new Pair<View,String>(image, "logo_image");
-//                //pairs[1] = new Pair<View,String>(logo, "logo_text");
-//                startActivity(intent);
-//
-//                /*if (android.os.Build.VERSION.SDK_INT >= 16) {
-//                    //ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,pairs);
-//                   *//* options.toBundle());*//*
-//                }*/
-//                            //wertyuiop   PUSH TRY
-//            }
-//        },5000);
+                /*if (android.os.Build.VERSION.SDK_INT >= 16) {
+                    //ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,pairs);
+                   *//* options.toBundle());*//*
+                }*/
+                            //wertyuiop   PUSH TRY
+            }
+        },5000);
     }
 }

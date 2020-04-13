@@ -31,31 +31,31 @@ public class Splash extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
 
-//        topAnim = AnimationUtils.loadAnimation(this,R.anim.top_animation);
-//        bottomAnim = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
-//
-//        image = findViewById(R.id.imageView);
-//        logo = findViewById(R.id.textView);
-//
-//        image.setAnimation(topAnim);
-//        logo.setAnimation(bottomAnim);
-//
-//        new Handler().postDelayed(new Runnable(){
-//
-//            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//            @Override
-//            public void run(){
-//                Intent intent = new Intent(Splash.this, Login.class);
-//                Pair[] pairs = new Pair[2];
-//                pairs[0] = new Pair<View,String>(image, "logo_image");
-//                pairs[1] = new Pair<View,String>(logo, "logo_text");
-//
-//                if (android.os.Build.VERSION.SDK_INT >= 16) {
-//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Splash.this,pairs);
-//                    startActivity(intent, options.toBundle());
-//                }
-//
-//            }
-//        },SPLASH_SCREEN);
+        topAnim = AnimationUtils.loadAnimation(this,R.anim.top_animation);
+        bottomAnim = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
+
+        image = findViewById(R.id.imageView);
+        logo = findViewById(R.id.textView);
+
+        image.setAnimation(topAnim);
+        logo.setAnimation(bottomAnim);
+
+        new Handler().postDelayed(new Runnable(){
+
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void run(){
+                Intent intent = new Intent(Splash.this, Login.class);
+                Pair[] pairs = new Pair[2];
+                pairs[0] = new Pair<View,String>(image, "logo_image");
+                pairs[1] = new Pair<View,String>(logo, "logo_text");
+
+                if (android.os.Build.VERSION.SDK_INT >= 16) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Splash.this,pairs);
+                    startActivity(intent, options.toBundle());
+                }
+
+            }
+        },SPLASH_SCREEN);
     }
 }
