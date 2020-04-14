@@ -87,6 +87,43 @@
                         android:includeFontPadding="false"
                         android:text="click here to select image "
                         android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/imagepath"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:visibility="invisible"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="150dp"
+                        android:layout_marginLeft="150dp"
+                        android:layout_marginTop="13dp"
+                        android:text="TextView" />
+                    <TextView
+                        android:id="@+id/latti_xml"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:visibility="invisible"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="150dp"
+                        android:layout_marginLeft="150dp"
+                        android:layout_marginTop="13dp"
+                        android:text="TextView" />
+                    <TextView
+                        android:id="@+id/long_xml"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:visibility="invisible"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="150dp"
+                        android:layout_marginLeft="150dp"
+                        android:layout_marginTop="13dp"
+                        android:text="TextView" />
                 </RelativeLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

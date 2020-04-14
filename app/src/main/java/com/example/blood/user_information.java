@@ -92,7 +92,16 @@ public class user_information {
     public user_information() {
     }
 
-    public user_information(String name, String url, String age, String blood, String phone, String email, String userid, String gender, String adress,String latti,String longi) {
+    public String getImagepath() {
+        return imagepath;
+    }
+
+    public void setImagepath(String imagepath) {
+        this.imagepath = imagepath;
+    }
+
+    public user_information(String imagepath,String name, String url, String age, String blood, String phone, String email, String userid, String gender, String adress, String latti, String longi) {
+        this.imagepath=imagepath;
         this.name = name;
         this.url = url;
         this.age = age;
@@ -107,6 +116,6 @@ public class user_information {
 
     }
 
-    private String name,url,age,blood,phone,email,userid,gender,adress;
+    private String name,url,age,blood,phone,email,userid,gender,adress,imagepath;
 
 }

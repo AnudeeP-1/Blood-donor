@@ -72,7 +72,7 @@ public class Login extends AppCompatActivity {
         id();      //findeViewById method called
         FirebaseUser user=firebaseAuth.getCurrentUser();
 
-        startActivity(new Intent(this,Next1.class));
+       // startActivity(new Intent(this,Next1.class));
 
        if(user!=null){
             finish();
