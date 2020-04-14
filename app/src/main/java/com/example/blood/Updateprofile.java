@@ -15,6 +15,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -127,13 +129,9 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                     REQUEST_CODE_LOCATION_PERMISSION);
 
         }else{
+            statusCheck();
             getCurrentLocation();
         }
-
-
-
-
-
 
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +144,33 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             }
         });
 
+    }
+    public void statusCheck() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        assert manager != null;
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void display(){
@@ -325,6 +350,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length>0){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                statusCheck();
                 getCurrentLocation();
             }else{
                 new AlertDialog.Builder(Updateprofile.this){}
