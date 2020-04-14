@@ -66,7 +66,7 @@ import java.net.URL;
 public class Updateprofile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     Toolbar toolbar;
-    String url;
+    private String url,temp,latti,longi;
     ProgressDialog load;
     DrawerLayout drawerLayout;
     Button hello,close;
@@ -115,6 +115,15 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 startActivityForResult(Intent.createChooser(intent, "SELECT IAMGE"), PICK_IMAGE);
             }
         });
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(Updateprofile.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE_LOCATION_PERMISSION);
+
+        }else{
+            getCurrentLocation();
+        }
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +157,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
                     }
                     url=user.getUrl();
+
                         Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(dp, new Callback() {
                                     @Override
                                     public void onSuccess() {
@@ -250,21 +260,13 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                                 url = String.valueOf(uri);
 
                                 //function call for getting lat and long
-                                permission();
+                               // permission();
 
                                 // TO GET REQUIREDPERMISSION for the first time  OR  to check whether the permission is been given
-                                if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                                        != PackageManager.PERMISSION_GRANTED){
-                                    ActivityCompat.requestPermissions(Updateprofile.this,
-                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                            REQUEST_CODE_LOCATION_PERMISSION);
 
-                                }else{
-                                    getCurrentLocation();
-                                }
 
                                 //name,url,age,blood,phone,email,userid,gender,adress   here add long and lat at last
-                                user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString());
+                                user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(),latti,longi);
                                 databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -282,7 +284,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             //if image is not selected for second time in offline mode
             final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
             databaseReference.keepSynced(true);
-            user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString());
+            user_information user_information = new user_information(name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(),latti,longi);
             databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -293,8 +295,6 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    public void permission(){}
-    //LOCATION DU permission sec time (Ie if permission denied for the first time)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -362,13 +362,8 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                             lattitude = locationResult.getLocations().get(latestlocationindex).getLatitude();
                             longitude = locationResult.getLocations().get(latestlocationindex).getLongitude();
 
-                            //STORING TO DATABASE (WITH CHILD....)
-                            user_information ui =new user_information();
-                            DatabaseReference reff;
-                            reff= FirebaseDatabase.getInstance().getReference(mAuth.getUid());
-                            ui.setLatti((Double.toString(lattitude)));
-                            ui.setLongi((Double.toString(longitude)));
-                            reff.setValue(ui);
+                            latti=Double.toString(lattitude);
+                            longi=Double.toString(longitude);
 
                             Location location = new Location("providerNA");
                             location.setLatitude(lattitude);
@@ -396,8 +391,9 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
             if(resultCode == constants.SUCCESS_RESULT){
-                String temp =(resultData.getString(constants.RESULT_DATA_KEY));
+                temp =(resultData.getString(constants.RESULT_DATA_KEY));
                 //TEMP ALLI ADDRESS EDE
+                adress.getEditText().setText(resultData.getString(constants.RESULT_DATA_KEY));
             }
             else{
                 Toast.makeText(Updateprofile.this,resultData.getString(constants.RESULT_DATA_KEY),Toast.LENGTH_SHORT).show();
