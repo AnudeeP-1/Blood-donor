@@ -130,26 +130,6 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             getCurrentLocation();
         }
 
-        double latitude = Double.parseDouble(latti);
-        double longitude = Double.parseDouble(longi);
-        Geocoder geocoder;
-        List<Address> addresses = null;
-        geocoder = new Geocoder(this, Locale.getDefault());
-
-
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-        Toast.makeText(Updateprofile.this,address, Toast.LENGTH_LONG).show();
 
 
 
@@ -393,18 +373,37 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                             lattitude = locationResult.getLocations().get(latestlocationindex).getLatitude();
                             longitude = locationResult.getLocations().get(latestlocationindex).getLongitude();
 
+                            Geocoder geocoder;
+                            List<Address> addresses = null;
+                            geocoder = new Geocoder(Updateprofile.this, Locale.getDefault());
+
+
+                            try {
+                                addresses = geocoder.getFromLocation(lattitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            String dattha = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//        String city = addresses.get(0).getLocality();
+//        String state = addresses.get(0).getAdminArea();
+//        String country = addresses.get(0).getCountryName();
+//        String postalCode = addresses.get(0).getPostalCode();
+//        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                            //Toast.makeText(Updateprofile.this,address, Toast.LENGTH_LONG).show();
+                            adress.getEditText().setText(dattha);
+
                             latti=Double.toString(lattitude);
                             longi=Double.toString(longitude);
 
-                            Location location = new Location("providerNA");
-                            location.setLatitude(lattitude);
-                            location.setLongitude(longitude);
+
                         }
                         else{
                             Toast.makeText(Updateprofile.this,"loading!!",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, Looper.getMainLooper());
+
     }
 
     @Override
