@@ -71,6 +71,9 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         id();      //findeViewById method called
         FirebaseUser user=firebaseAuth.getCurrentUser();
+
+        startActivity(new Intent(this,Next1.class));
+
        if(user!=null){
             finish();
            startActivity(new Intent(this,Next1.class));

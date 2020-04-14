@@ -19,6 +19,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,7 +63,10 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Locale;
 
 public class Updateprofile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -124,6 +129,32 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         }else{
             getCurrentLocation();
         }
+
+        double latitude = Double.parseDouble(latti);
+        double longitude = Double.parseDouble(longi);
+        Geocoder geocoder;
+        List<Address> addresses = null;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+        Toast.makeText(Updateprofile.this,address, Toast.LENGTH_LONG).show();
+
+
+
+
+
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,7 +399,6 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                             Location location = new Location("providerNA");
                             location.setLatitude(lattitude);
                             location.setLongitude(longitude);
-                            fetchAddressFromLatLong(location);
                         }
                         else{
                             Toast.makeText(Updateprofile.this,"loading!!",Toast.LENGTH_SHORT).show();
@@ -376,33 +406,6 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                     }
                 }, Looper.getMainLooper());
     }
-    private void fetchAddressFromLatLong(Location location) {
-        Intent intent =new Intent(this,FetchAddressIntentServices.class);
-        intent.putExtra(constants.RECEIVER,resultReceiver);
-        intent.putExtra(constants.LOCATION_DATA_EXTRA,location);
-        startService(intent);
-    }
-
-    private class AddressResultReceiver extends ResultReceiver{
-        AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            super.onReceiveResult(resultCode, resultData);
-            if(resultCode == constants.SUCCESS_RESULT){
-                temp =(resultData.getString(constants.RESULT_DATA_KEY));
-                //TEMP ALLI ADDRESS EDE
-                adress.getEditText().setText(resultData.getString(constants.RESULT_DATA_KEY));
-            }
-            else{
-                Toast.makeText(Updateprofile.this,resultData.getString(constants.RESULT_DATA_KEY),Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

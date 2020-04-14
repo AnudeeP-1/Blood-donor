@@ -104,6 +104,7 @@ public class user_information {
         this.adress = adress;
         this.latti=latti;
         this.longi=longi;
+
     }
 
     private String name,url,age,blood,phone,email,userid,gender,adress;
