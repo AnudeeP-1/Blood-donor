@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#434574"
+    tools:context="com.example.blood.sms">
+    <ImageView
+        android:id="@+id/phonesignupimage"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="150dp"
+        android:src="@drawable/spl"
+        android:transitionName="logo_image" />
+
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/border"
+        android:ems="5"
+        android:gravity="center"
+        android:hint="Write a message to donor(optional)"
+        android:inputType="textMultiLine"
+        android:maxLines="100"
+        android:paddingLeft="5dp"
+        android:paddingStart="5dp" />
+
+
+
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/message"
+        android:layout_centerHorizontal="true"
+        android:text="SEND"
+        android:background="@drawable/button_round"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:layout_marginTop="70dp" />
+
+</RelativeLayout>
