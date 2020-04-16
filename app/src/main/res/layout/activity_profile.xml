@@ -53,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:background="#fece2f"
+
                 android:padding="20dp">
 
                 <ImageView

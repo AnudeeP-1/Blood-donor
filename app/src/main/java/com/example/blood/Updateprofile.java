@@ -15,15 +15,18 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +49,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -71,7 +76,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class Updateprofile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+    private BroadcastReceiver MyReceiver = null;
     Toolbar toolbar;
     private String url,temp,latti,longi;
     ProgressDialog load;
@@ -106,6 +111,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_updateprofile);
         id();
+        final ConnectionDetector cd=new ConnectionDetector(this);
         navbar_function();
         alertDialog.show();
         //checkin already user gave information
@@ -137,6 +143,9 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 if(flag==0) Toast.makeText(Updateprofile.this,"Select Profile photo",Toast.LENGTH_LONG).show();
+                else if(!cd.isConnected())
+                Toast.makeText(Updateprofile.this,"Check your network",Toast.LENGTH_LONG).show();
+
                 else if (validate()) {
                     //add user data to firebase
                     add_data();
@@ -205,7 +214,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                                         Picasso.get().load(user.getUrl()).fit().centerCrop().into(dp);
                                     }
                                 });
-                    Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
+                   // Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
                     age.getEditText().setText(user.getAge());
                     email.getEditText().setText(user.getEmail());
                     phone.getEditText().setText(user.getPhone());
@@ -218,6 +227,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                     else if(user.getGender().equalsIgnoreCase("Others"))
                             gender.setSelection(2);
                     alertDialog.dismiss();
+                        flag=1;
                     }
                     catch(Exception e){alertDialog.dismiss();}
                 }
@@ -230,7 +240,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             });
         }
         catch(Exception e){alertDialog.dismiss();}
-        flag=1;
+
     }
 
     private boolean validate() {
@@ -278,6 +288,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     private void add_data(){
         if(imagepath!=null) {
             try {
+
                 //for online mode
                 final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
                 databaseReference.keepSynced(true);
@@ -317,31 +328,47 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                         });
                     }
                 });
-            }catch (Exception e){Toast.makeText(Updateprofile.this,"Check you have proper internet connection",Toast.LENGTH_LONG).show();}
+            }catch (Exception e){Toast.makeText(Updateprofile.this,e.getMessage()+"   DP",Toast.LENGTH_LONG).show();}
         }
         else{
             try {
                 //if image is not selected for second time in offline mode
-                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
-                databaseReference.keepSynced(true);
-                final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
 
-                UploadTask uploadTask = storageReference.putFile(Uri.parse(image_xml.getText().toString()));
-                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                        alertDialog.show();
-                    }
-                });
-                user_information user_information = new user_information(image_xml.getText().toString(), name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(), latti_xml.getText().toString(), longi_xml.getText().toString());
-                databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        alertDialog.dismiss();
-                        Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
-                    }
-                });
-            }catch (Exception e){Toast.makeText(Updateprofile.this,"Check your internet connection",Toast.LENGTH_LONG).show();}
+               // Toast.makeText(this, "Please wait", Toast.LENGTH_SHORT).show();
+
+                  final DatabaseReference databaseReference11 = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+                  databaseReference11.keepSynced(true);
+                  final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
+
+                  UploadTask uploadTask = storageReference.putFile(Uri.parse(image_xml.getText().toString()));
+                  uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                      @Override
+                      public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                          alertDialog.show();
+                      }
+                  }).addOnFailureListener(new OnFailureListener() {
+                      @Override
+                      public void onFailure(@NonNull Exception e) {
+                          alertDialog.dismiss();
+                          Toast.makeText(Updateprofile.this, "Check your internet", Toast.LENGTH_LONG).show();
+                      }
+                  }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                      @Override
+                      public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                          user_information user_information = new user_information(image_xml.getText().toString(), name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(), latti_xml.getText().toString(), longi_xml.getText().toString());
+                          databaseReference11.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                              @Override
+                              public void onSuccess(Void aVoid) {
+                                  alertDialog.dismiss();
+                                  Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
+                              }
+                          });
+                      }
+                  });
+
+
+            }catch (Exception e){alertDialog.dismiss();Toast.makeText(Updateprofile.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                }
         }
     }
 
