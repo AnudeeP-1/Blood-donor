@@ -78,7 +78,8 @@ import java.util.Locale;
 public class Updateprofile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private BroadcastReceiver MyReceiver = null;
     Toolbar toolbar;
-    private String url,temp,latti,longi;
+    private String url,temp;
+    public String latti,longi,city,postalCode;
     ProgressDialog load;
     DrawerLayout drawerLayout;
     Button hello,close;
@@ -288,9 +289,8 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     private void add_data(){
         if(imagepath!=null) {
             try {
-
                 //for online mode
-                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(city);
                 databaseReference.keepSynced(true);
                 final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
 
@@ -317,7 +317,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
                                 //name,url,age,blood,phone,email,userid,gender,adress   here add long and lat at last
                                 user_information user_information = new user_information(new String(String.valueOf(imagepath)),name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(),latti,longi);
-                                databaseReference.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                databaseReference.child(postalCode).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         alertDialog.dismiss();
@@ -426,7 +426,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     }
 
     //getting current location
-    private void getCurrentLocation() {
+    public void getCurrentLocation() {
         final LocationRequest locationrequest = new LocationRequest();
         locationrequest.setInterval(10000);
         locationrequest.setFastestInterval(3000);
@@ -455,16 +455,18 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                             }
 
                             String dattha = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//        String city = addresses.get(0).getLocality();
+                            city = addresses.get(0).getLocality();
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
-//        String postalCode = addresses.get(0).getPostalCode();
+                            postalCode = addresses.get(0).getPostalCode();
 //        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                            //Toast.makeText(Updateprofile.this,address, Toast.LENGTH_LONG).show();
+                            Toast.makeText(Updateprofile.this,city, Toast.LENGTH_LONG).show();
+                            Toast.makeText(Updateprofile.this,postalCode, Toast.LENGTH_LONG).show();
                             adress.getEditText().setText(dattha);
 
                             latti=Double.toString(lattitude);
                             longi=Double.toString(longitude);
+
 
 
                         }

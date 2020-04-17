@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.firebaseui:firebase-ui-database:3.1.3@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7b7a2e1ed29726630256553978c2be07/jetified-firebase-ui-database-3.1.3/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7b7a2e1ed29726630256553978c2be07/jetified-firebase-ui-database-3.1.3/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/63c9544f56a994c8c9342bd03d0d3c26/jetified-firebase-ui-database-3.1.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/63c9544f56a994c8c9342bd03d0d3c26/jetified-firebase-ui-database-3.1.3/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.firebaseui/firebase-ui-database/3.1.3/b4eb3956fb70fcbd0679f4e79526bfc3a9c2ff60/firebase-ui-database-3.1.3-javadoc.jar!/" />
