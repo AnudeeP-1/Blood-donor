@@ -89,89 +89,68 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     private void display1(final String id){
 
         FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
-try{
 
-    DatabaseReference firebaseDatabase1 = FirebaseDatabase.getInstance().getReference(id);
-    firebaseDatabase1.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            try{
-            post code2=dataSnapshot.getValue(post.class);
-            }catch(Exception e){
-                alertDialog.dismiss();
-                finish();
-                Toast.makeText(Profile.this,"User doesn't have profile",Toast.LENGTH_LONG).show();
-                startActivity(new Intent(Profile.this,Next1.class));
-            }
-            try {
-                post code1 = dataSnapshot.getValue(post.class);
-                DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("users").child(code1.getPost()).child(id);
 
-                firebaseDatabase.keepSynced(true);
-                firebaseDatabase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        try {
-                            user_information user = dataSnapshot.getValue(user_information.class);
-                        } catch (Exception e) {
-                            alertDialog.dismiss();
-                            finish();
-                            Toast.makeText(Profile.this, "User doesn't have profile", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(Profile.this, Next1.class));
+    try {
+
+        DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("any").child(id);
+
+        firebaseDatabase.keepSynced(true);
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    user_information user = dataSnapshot.getValue(user_information.class);
+                } catch (Exception e) {
+                    alertDialog.dismiss();
+                    finish();
+                    Toast.makeText(Profile.this, "User doesn't have profile", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(Profile.this, Next1.class));
+                }
+                final user_information user = dataSnapshot.getValue(user_information.class);
+                try {
+                    Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
                         }
-                        final user_information user = dataSnapshot.getValue(user_information.class);
-                        try {
-                            Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
-                                @Override
-                                public void onSuccess() {
 
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    Picasso.get().load(user.getUrl()).fit().centerCrop().into(profile);
-                                }
-                            });
-
-
-                            name.setText(user.getName());
-                            blood.setText(user.getBlood());
-                            Age.setText(user.getAge());
-                            email.setText(user.getEmail());
-                            phone.setText(user.getPhone());
-                            Adress.setText(user.getAdress());
-                            Gender.setText(user.getGender());
-                            alertDialog.dismiss();
-                        } catch (Exception e) {
-                            alertDialog.dismiss();
-                            finish();
-                            Toast.makeText(Profile.this, "User doesn't have profile", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(Profile.this, Next1.class));
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(user.getUrl()).fit().centerCrop().into(profile);
                         }
-                    }
+                    });
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }catch(Exception e){alertDialog.dismiss();
-                finish();
-                Toast.makeText(Profile.this,"User doesn't have profile",Toast.LENGTH_LONG).show();
-                startActivity(new Intent(Profile.this,Next1.class));
+
+                    name.setText(user.getName());
+                    blood.setText(user.getBlood());
+                    Age.setText(user.getAge());
+                    email.setText(user.getEmail());
+                    phone.setText(user.getPhone());
+                    Adress.setText(user.getAdress());
+                    Gender.setText(user.getGender());
+                    alertDialog.dismiss();
+                } catch (Exception e) {
+                    alertDialog.dismiss();
+                    finish();
+                    Toast.makeText(Profile.this, "User doesn't have profile", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(Profile.this, Next1.class));
+                }
             }
-        }
 
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    });
-    }catch (Exception e){alertDialog.dismiss();
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }catch(Exception e){alertDialog.dismiss();
         finish();
         Toast.makeText(Profile.this,"User doesn't have profile",Toast.LENGTH_LONG).show();
         startActivity(new Intent(Profile.this,Next1.class));
     }
+
+
+
 
 
     }
@@ -190,75 +169,51 @@ try{
        }catch(Exception e){Toast.makeText(this,"You don't have profile page",Toast.LENGTH_LONG).show();
            startActivity(new Intent(Profile.this,Next1.class));
        }
-       try {
-           FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
-               @Override
-               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                   try {
-                       final post code1 = dataSnapshot.getValue(post.class);
-                   } catch (Exception e) {
-                       Toast.makeText(Profile.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
-                       startActivity(new Intent(Profile.this, Next1.class));
-                   }
+        try {
+            DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("any").child(FirebaseAuth.getInstance().getUid());
 
-                   final post code1 = dataSnapshot.getValue(post.class);
+            firebaseDatabase.keepSynced(true);
+            firebaseDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        final user_information user = dataSnapshot.getValue(user_information.class);
+                        if (user != null) {
+                            Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
+                                @Override
+                                public void onSuccess() {
 
-//                   Toast.makeText(Profile.this,code1.getPost(),Toast.LENGTH_SHORT).show();
-                   try {
-                       DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("users").child(code1.getPost()).child(FirebaseAuth.getInstance().getUid());
+                                }
 
-                       firebaseDatabase.keepSynced(true);
-                       firebaseDatabase.addValueEventListener(new ValueEventListener() {
-                           @Override
-                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                               try {
-                                   final user_information user = dataSnapshot.getValue(user_information.class);
-                                   if (user != null) {
-                                       Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(profile, new Callback() {
-                                           @Override
-                                           public void onSuccess() {
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get().load(user.getUrl()).into(profile);
+                                }
+                            });
+                        }
+                        name.setText(user.getName());
+                        blood.setText(user.getBlood());
+                        Age.setText(user.getAge());
+                        email.setText(user.getEmail());
+                        phone.setText(user.getPhone());
+                        Adress.setText(user.getAdress());
+                        Gender.setText(user.getGender());
+                        alertDialog.dismiss();
+                    } catch (Exception e) {
+                        Toast.makeText(Profile.this, "dont have profile page", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(Profile.this, Next1.class));
+                    }
+                }
 
-                                           }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
 
-                                           @Override
-                                           public void onError(Exception e) {
-                                               Picasso.get().load(user.getUrl()).into(profile);
-                                           }
-                                       });
-                                   }
-                                   name.setText(user.getName());
-                                   blood.setText(user.getBlood());
-                                   Age.setText(user.getAge());
-                                   email.setText(user.getEmail());
-                                   phone.setText(user.getPhone());
-                                   Adress.setText(user.getAdress());
-                                   Gender.setText(user.getGender());
-                                   alertDialog.dismiss();
-                               } catch (Exception e) {
-                                   Toast.makeText(Profile.this, "dont have profile page", Toast.LENGTH_LONG).show();
-                                   startActivity(new Intent(Profile.this, Next1.class));
-                               }
-                           }
-
-                           @Override
-                           public void onCancelled(@NonNull DatabaseError databaseError) {
-                               Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
-                           }
-                       });
-
-                   }catch(Exception e){ Toast.makeText(Profile.this,"dont have profile page", Toast.LENGTH_LONG).show();
-                       startActivity(new Intent(Profile.this, Next1.class));
-                   }
-               }
-
-
-               @Override
-               public void onCancelled(@NonNull DatabaseError databaseError) {
-
-               }
-           });
-       }catch (Exception e){}
-
+        }catch(Exception e){ Toast.makeText(Profile.this,"dont have profile page", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(Profile.this, Next1.class));
+        }
     }
 
     private void id(){

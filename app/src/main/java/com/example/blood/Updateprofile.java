@@ -199,80 +199,62 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
             });
         }catch(Exception e){alertDialog.dismiss(); }
         try {
-            DatabaseReference firebaseDatabase1 = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
-            firebaseDatabase1.addValueEventListener(new ValueEventListener() {
+            DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("any").child(FirebaseAuth.getInstance().getUid());
+            firebaseDatabase.keepSynced(true);
+            firebaseDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        post code1 = dataSnapshot.getValue(post.class);
-                        try {
-                            DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("users").child(code1.getPost()).child(FirebaseAuth.getInstance().getUid());
+                        final user_information user = dataSnapshot.getValue(user_information.class);
+                        name.getEditText().setText(user.getName());
 
-                            firebaseDatabase.keepSynced(true);
-                            firebaseDatabase.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    try {
-                                        final user_information user = dataSnapshot.getValue(user_information.class);
-                                        name.getEditText().setText(user.getName());
+                        for (int i = 0; i < blood.getCount(); i++) {
+                            if (blood.getItemAtPosition(i).toString().equalsIgnoreCase(user.getBlood())) {
+                                blood.setSelection(i);
+                                break;
+                            }
 
-                                        for (int i = 0; i < blood.getCount(); i++) {
-                                            if (blood.getItemAtPosition(i).toString().equalsIgnoreCase(user.getBlood())) {
-                                                blood.setSelection(i);
-                                                break;
-                                            }
+                        }
+                        url = user.getUrl();
 
-                                        }
-                                        url = user.getUrl();
+                        Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(dp, new Callback() {
+                            @Override
+                            public void onSuccess() {
 
-                                        Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(dp, new Callback() {
-                                            @Override
-                                            public void onSuccess() {
+                            }
 
-                                            }
-
-                                            @Override
-                                            public void onError(Exception e) {
-                                                Picasso.get().load(user.getUrl()).fit().centerCrop().into(dp);
-                                            }
-                                        });
-                                        // Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
-                                        age.getEditText().setText(user.getAge());
-                                        email.getEditText().setText(user.getEmail());
-                                        phone.getEditText().setText(user.getPhone());
-                                        adress.getEditText().setText(user.getAdress());
-                                        longi_xml.setText(user.getLongi());
-                                        latti_xml.setText(user.getLatti());
-                                        image_xml.setText(user.getImagepath());
-                                        if (user.getGender().equalsIgnoreCase("Female"))
-                                            gender.setSelection(1);
-                                        else if (user.getGender().equalsIgnoreCase("Others"))
-                                            gender.setSelection(2);
-                                        alertDialog.dismiss();
-                                        flag = 1;
-                                    } catch (Exception e) {
-                                        alertDialog.dismiss();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    alertDialog.dismiss();
-                                    Toast.makeText(Updateprofile.this, "Reload this page ", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }catch(Exception e){alertDialog.dismiss();}
-
-                    }catch (Exception e){alertDialog.dismiss();}
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(user.getUrl()).fit().centerCrop().into(dp);
+                            }
+                        });
+                        // Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
+                        age.getEditText().setText(user.getAge());
+                        email.getEditText().setText(user.getEmail());
+                        phone.getEditText().setText(user.getPhone());
+                        adress.getEditText().setText(user.getAdress());
+                        longi_xml.setText(user.getLongi());
+                        latti_xml.setText(user.getLatti());
+                        image_xml.setText(user.getImagepath());
+                        if (user.getGender().equalsIgnoreCase("Female"))
+                            gender.setSelection(1);
+                        else if (user.getGender().equalsIgnoreCase("Others"))
+                            gender.setSelection(2);
+                        alertDialog.dismiss();
+                        flag = 1;
+                    } catch (Exception e) {
+                        alertDialog.dismiss();
+                    }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    alertDialog.dismiss();
+                    Toast.makeText(Updateprofile.this, "Reload this page ", Toast.LENGTH_LONG).show();
                 }
             });
-        }catch (Exception e){alertDialog.dismiss();}
-       }
+        }catch(Exception e){alertDialog.dismiss();}
+    }
 
 
 
@@ -350,12 +332,12 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
 
                                 //name,url,age,blood,phone,email,userid,gender,adress   here add long and lat at last
-                                user_information user_information = new user_information(new String(String.valueOf(imagepath)),name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(),latti,longi);
+                                final user_information user_information = new user_information(new String(String.valueOf(imagepath)),name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(),latti,longi,postalCode);
                                 databaseReference.child("users").child(postalCode).child(FirebaseAuth.getInstance().getUid()).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         alertDialog.setMessage("Almost Done");
-                                        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).setValue(new post(postalCode)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        FirebaseDatabase.getInstance().getReference("any").child(FirebaseAuth.getInstance().getUid()).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 alertDialog.dismiss();
@@ -396,12 +378,12 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                   }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                       @Override
                       public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                          user_information user_information = new user_information(image_xml.getText().toString(), name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(), latti_xml.getText().toString(), longi_xml.getText().toString());
+                          final user_information user_information = new user_information(image_xml.getText().toString(), name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(), latti_xml.getText().toString(), longi_xml.getText().toString(),postalCode);
                           databaseReference11.child("users").child(postalCode).child(FirebaseAuth.getInstance().getUid()).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                               @Override
                               public void onSuccess(Void aVoid) {
                                   alertDialog.setMessage("Almost Done");
-                                  FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).setValue(new Object(){String post=postalCode;}).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                  FirebaseDatabase.getInstance().getReference("any").child(FirebaseAuth.getInstance().getUid()).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                                       @Override
                                       public void onSuccess(Void aVoid) {
                                           alertDialog.dismiss();

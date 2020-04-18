@@ -1,7 +1,7 @@
 package com.example.blood;
 
 public class user_information {
-    private String latti,longi;
+    private String latti,longi,post;
     public String getName() {
         return name;
     }
@@ -100,7 +100,15 @@ public class user_information {
         this.imagepath = imagepath;
     }
 
-    public user_information(String imagepath,String name, String url, String age, String blood, String phone, String email, String userid, String gender, String adress, String latti, String longi) {
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public user_information(String imagepath, String name, String url, String age, String blood, String phone, String email, String userid, String gender, String adress, String latti, String longi,String post) {
         this.imagepath=imagepath;
         this.name = name;
         this.url = url;
@@ -110,6 +118,7 @@ public class user_information {
         this.email = email;
         this.userid = userid;
         this.gender = gender;
+        this.post=post;
         this.adress = adress;
         this.latti=latti;
         this.longi=longi;
