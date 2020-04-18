@@ -48,6 +48,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
         android:text="Donate"
+        android:textColor="#000000"
         android:textSize="30sp"
         app:fontFamily="@font/baloo"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
@@ -63,6 +64,7 @@
         android:text="Save a precious life!!"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#000000"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -98,7 +100,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#CE0CA602"
                 android:id="@+id/donate"
                 >
 
@@ -110,6 +111,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Donate"
+                    android:textColor="#000000"
                     android:textSize="24sp"
                     app:fontFamily="@font/aclonica" />
 
@@ -132,7 +134,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#CE0CA602"
                 android:id="@+id/request"
                 >
 
@@ -144,6 +145,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Request"
+                    android:textColor="#000000"
                     android:textSize="24sp"
                     app:fontFamily="@font/aclonica" />
 
@@ -162,11 +164,17 @@
             android:id="@+id/message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="24dp"
-            android:text="                          We found that donors desire to help a family member or a friend in need of blood was the most cited motivator for blood donation in this study followed by a positive attitude of staff at the donor clinic, the desire to help other people, and a reminder to donate when there is a shortage of blood."
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="“Don't let fools or mosquitoes suck your blood, put it to good use. Donate blood and save a life.”"
+            android:textColor="#000000"
             android:textSize="25sp"
-            app:fontFamily="@font/strait"
+            app:fontFamily="@font/baloo"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 

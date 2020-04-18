@@ -249,6 +249,11 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.nav_about:
+                Intent intent2 = new Intent (Profile.this,about.class);
+                startActivity(intent2);
+
             case R.id.nav_profile:
                 break;
             case R.id.nav_home:
@@ -256,7 +261,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
             case R.id.nav_guidlines:
-                startActivity(new Intent(this,Updateprofile.class));
+                startActivity(new Intent(this,guidlines.class));
                 break;
             case R.id.nav_logout:
                 FirebaseAuth.getInstance().signOut();

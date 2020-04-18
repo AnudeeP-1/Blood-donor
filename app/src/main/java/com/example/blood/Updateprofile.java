@@ -547,6 +547,11 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.nav_about:
+                Intent intent2 = new Intent (Updateprofile.this,about.class);
+                startActivity(intent2);
+
             case R.id.nav_home:
                 Intent intent = new Intent (Updateprofile.this,Next1.class);
                 startActivity(intent);
@@ -563,7 +568,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 startActivity(new Intent(this,Login.class));
                 break;
             case R.id.nav_guidlines:
-                startActivity(new Intent(this,Updateprofile.class));
+                startActivity(new Intent(this,guidlines.class));
                 break;
             case R.id.nav_search:
                 //Search popup

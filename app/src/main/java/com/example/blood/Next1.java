@@ -87,6 +87,11 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.nav_about:
+                Intent intent2 = new Intent (Next1.this,about.class);
+                startActivity(intent2);
+
             case R.id.nav_home:
                 /*navigationView.setCheckedItem(R.id.nav_home);*/
                 break;
@@ -96,7 +101,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
                 /*navigationView.setCheckedItem(R.id.nav_profile);*/
                 break;
             case R.id.nav_guidlines:
-                Intent intent1 = new Intent (Next1.this,Updateprofile.class);
+                Intent intent1 = new Intent (Next1.this,guidlines.class);
                 startActivity(intent1);
                 break;
             case R.id.nav_logout:
@@ -107,6 +112,8 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
             case R.id.nav_search:
                 //Search popup
                     search();
+
+
 
         }
         return true;
