@@ -79,7 +79,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     private BroadcastReceiver MyReceiver = null;
     Toolbar toolbar;
     private String url,temp;
-    public String latti,longi,city,postalCode;
+    public String latti,longi,city,postalCode,code2;
     ProgressDialog load;
     DrawerLayout drawerLayout;
     Button hello,close;
@@ -129,7 +129,10 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 startActivityForResult(Intent.createChooser(intent, "SELECT IAMGE"), PICK_IMAGE);
             }
         });
-        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if(!cd.isConnected())
+            Toast.makeText(Updateprofile.this,"Check your network",Toast.LENGTH_LONG).show();
+
+       else if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(Updateprofile.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -146,6 +149,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 if(flag==0) Toast.makeText(Updateprofile.this,"Select Profile photo",Toast.LENGTH_LONG).show();
                 else if(!cd.isConnected())
                 Toast.makeText(Updateprofile.this,"Check your network",Toast.LENGTH_LONG).show();
+                else if(postalCode==null||postalCode.isEmpty())  Toast.makeText(Updateprofile.this,"Your Location is off",Toast.LENGTH_LONG).show();
 
                 else if (validate()) {
                     //add user data to firebase
@@ -167,7 +171,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+        builder.setMessage("Without location App doesn't work proper\nYour GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
@@ -184,65 +188,95 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
     }
 
     private void display(){
+        FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
         try {
+            firebaseStorage.getReference((FirebaseAuth.getInstance().getUid())).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).fit().centerCrop().into(dp);
 
-            DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
-            firebaseDatabase.keepSynced(true);
-            firebaseDatabase.addValueEventListener(new ValueEventListener() {
+                }
+            });
+        }catch(Exception e){alertDialog.dismiss(); }
+        try {
+            DatabaseReference firebaseDatabase1 = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+            firebaseDatabase1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try{
-                    final user_information user = dataSnapshot.getValue(user_information.class);
-                    name.getEditText().setText(user.getName());
+                    try {
+                        post code1 = dataSnapshot.getValue(post.class);
+                        try {
+                            DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("users").child(code1.getPost()).child(FirebaseAuth.getInstance().getUid());
 
-                    for(int i=0;i<blood.getCount();i++){
-                        if(blood.getItemAtPosition(i).toString().equalsIgnoreCase(user.getBlood())){
-                            blood.setSelection(i);
-                            break;
-                        }
+                            firebaseDatabase.keepSynced(true);
+                            firebaseDatabase.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    try {
+                                        final user_information user = dataSnapshot.getValue(user_information.class);
+                                        name.getEditText().setText(user.getName());
 
-                    }
-                    url=user.getUrl();
+                                        for (int i = 0; i < blood.getCount(); i++) {
+                                            if (blood.getItemAtPosition(i).toString().equalsIgnoreCase(user.getBlood())) {
+                                                blood.setSelection(i);
+                                                break;
+                                            }
 
-                        Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(dp, new Callback() {
-                                    @Override
-                                    public void onSuccess() {
+                                        }
+                                        url = user.getUrl();
 
+                                        Picasso.get().load(user.getUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(dp, new Callback() {
+                                            @Override
+                                            public void onSuccess() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Exception e) {
+                                                Picasso.get().load(user.getUrl()).fit().centerCrop().into(dp);
+                                            }
+                                        });
+                                        // Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
+                                        age.getEditText().setText(user.getAge());
+                                        email.getEditText().setText(user.getEmail());
+                                        phone.getEditText().setText(user.getPhone());
+                                        adress.getEditText().setText(user.getAdress());
+                                        longi_xml.setText(user.getLongi());
+                                        latti_xml.setText(user.getLatti());
+                                        image_xml.setText(user.getImagepath());
+                                        if (user.getGender().equalsIgnoreCase("Female"))
+                                            gender.setSelection(1);
+                                        else if (user.getGender().equalsIgnoreCase("Others"))
+                                            gender.setSelection(2);
+                                        alertDialog.dismiss();
+                                        flag = 1;
+                                    } catch (Exception e) {
+                                        alertDialog.dismiss();
                                     }
+                                }
 
-                                    @Override
-                                    public void onError(Exception e) {
-                                        Picasso.get().load(user.getUrl()).fit().centerCrop().into(dp);
-                                    }
-                                });
-                   // Toast.makeText(Updateprofile.this,"  uri is: "+imagepath,Toast.LENGTH_LONG).show();
-                    age.getEditText().setText(user.getAge());
-                    email.getEditText().setText(user.getEmail());
-                    phone.getEditText().setText(user.getPhone());
-                    adress.getEditText().setText(user.getAdress());
-                    longi_xml.setText(user.getLongi());
-                    latti_xml.setText(user.getLatti());
-                    image_xml.setText(user.getImagepath());
-                    if(user.getGender().equalsIgnoreCase("Female"))
-                        gender.setSelection(1);
-                    else if(user.getGender().equalsIgnoreCase("Others"))
-                            gender.setSelection(2);
-                    alertDialog.dismiss();
-                        flag=1;
-                    }
-                    catch(Exception e){alertDialog.dismiss();}
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    alertDialog.dismiss();
+                                    Toast.makeText(Updateprofile.this, "Reload this page ", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }catch(Exception e){alertDialog.dismiss();}
+
+                    }catch (Exception e){alertDialog.dismiss();}
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    alertDialog.dismiss();
-                    Toast.makeText(Updateprofile.this, "Reload this page ", Toast.LENGTH_LONG).show();
+
                 }
             });
-        }
-        catch(Exception e){alertDialog.dismiss();}
+        }catch (Exception e){alertDialog.dismiss();}
+       }
 
-    }
+
+
+
 
     private boolean validate() {
         if (name.getEditText().getText().toString().isEmpty()) {
@@ -290,7 +324,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
         if(imagepath!=null) {
             try {
                 //for online mode
-                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(city);
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.keepSynced(true);
                 final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
 
@@ -317,12 +351,19 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
                                 //name,url,age,blood,phone,email,userid,gender,adress   here add long and lat at last
                                 user_information user_information = new user_information(new String(String.valueOf(imagepath)),name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(),latti,longi);
-                                databaseReference.child(postalCode).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                databaseReference.child("users").child(postalCode).child(FirebaseAuth.getInstance().getUid()).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        alertDialog.dismiss();
-                                        Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
-                                    }
+                                        alertDialog.setMessage("Almost Done");
+                                        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).setValue(new post(postalCode)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                alertDialog.dismiss();
+                                                Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
+
+                                            }
+                                        });
+                                           }
                                 });
                             }
                         });
@@ -336,7 +377,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
                // Toast.makeText(this, "Please wait", Toast.LENGTH_SHORT).show();
 
-                  final DatabaseReference databaseReference11 = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid());
+                  final DatabaseReference databaseReference11 = FirebaseDatabase.getInstance().getReference();
                   databaseReference11.keepSynced(true);
                   final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
 
@@ -356,18 +397,24 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                       @Override
                       public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                           user_information user_information = new user_information(image_xml.getText().toString(), name.getEditText().getText().toString(), url, age.getEditText().getText().toString(), blood.getSelectedItem().toString(), phone.getEditText().getText().toString(), email.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid().toString(), gender.getSelectedItem().toString(), adress.getEditText().getText().toString(), latti_xml.getText().toString(), longi_xml.getText().toString());
-                          databaseReference11.setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
+                          databaseReference11.child("users").child(postalCode).child(FirebaseAuth.getInstance().getUid()).setValue(user_information).addOnSuccessListener(new OnSuccessListener<Void>() {
                               @Override
                               public void onSuccess(Void aVoid) {
-                                  alertDialog.dismiss();
-                                  Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
-                              }
+                                  alertDialog.setMessage("Almost Done");
+                                  FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).setValue(new Object(){String post=postalCode;}).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                      @Override
+                                      public void onSuccess(Void aVoid) {
+                                          alertDialog.dismiss();
+                                          Snackbar.make(constraintLayout, "Succesfully Registered", Snackbar.LENGTH_LONG).show();
+
+                                      }
+                                  });   }
                           });
                       }
                   });
 
 
-            }catch (Exception e){alertDialog.dismiss();Toast.makeText(Updateprofile.this,e.getMessage(),Toast.LENGTH_LONG).show();
+            }catch (Exception e){alertDialog.dismiss();Toast.makeText(Updateprofile.this,"Please select latest image",Toast.LENGTH_LONG).show();
                 }
         }
     }
@@ -449,7 +496,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
 
 
                             try {
-                                addresses = geocoder.getFromLocation(lattitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                addresses = geocoder.getFromLocation(lattitude, longitude, 2); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -458,10 +505,10 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                             city = addresses.get(0).getLocality();
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
-                            postalCode = addresses.get(0).getPostalCode();
+                            postalCode =addresses.get(1).getPostalCode();
 //        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                            Toast.makeText(Updateprofile.this,city, Toast.LENGTH_LONG).show();
-                            Toast.makeText(Updateprofile.this,postalCode, Toast.LENGTH_LONG).show();
+                           Toast.makeText(Updateprofile.this,postalCode, Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(Updateprofile.this,postalCode, Toast.LENGTH_LONG).show();
                             adress.getEditText().setText(dattha);
 
                             latti=Double.toString(lattitude);
@@ -551,7 +598,7 @@ public class Updateprofile extends AppCompatActivity implements NavigationView.O
                 hello.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent=new Intent(getApplicationContext(),Search_popup.class);
+                        Intent intent=new Intent(getApplicationContext(),Profile.class);
                         EditText text=MyDialog.findViewById(R.id.edittext);
 
                         intent.putExtra("userID",text.getText().toString().trim());

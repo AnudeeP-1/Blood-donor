@@ -39,8 +39,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:paddingLeft="40dp"
+        android:fontFamily="@font/aclonica"
         android:paddingRight="40dp"
-        android:text="Find distance and confirm request"
+        android:text="Find distance in Google Map"
         android:textColor="@color/white"
         app:fontFamily="@font/antic" />
 
@@ -66,7 +67,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_gravity="center|end"
-            android:text="CONFIRM"
+            android:text="CONFIRM request"
             android:layout_margin="20dp"
             android:textStyle="bold"
             android:id="@+id/close"

@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -29,6 +31,7 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
     Toolbar toolbar;
     RelativeLayout donate,request;
     Button hello,close;
+    String near_by_user="0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +128,11 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), "Hello, I'm Custom Alert Dialog", Toast.LENGTH_LONG).show();
                 //  Intent intent=new Intent(getApplicationContext(),search.class);
-
+                near_by_user="1";
+                MyDialog.dismiss();
+                blood_group_popup();
                 //  startActivity(intent);
 
             }
@@ -136,8 +141,44 @@ public class Next1 extends AppCompatActivity implements NavigationView.OnNavigat
             @Override
             public void onClick(View v) {
                 MyDialog.cancel();
+                blood_group_popup();
             }
         });
+
+        MyDialog.show();
+    }
+    public void blood_group_popup(){
+        final Dialog MyDialog = new Dialog(Next1.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.activity_blood_group_popup);
+        hello = (Button)MyDialog.findViewById(R.id.hello);
+        close = (Button)MyDialog.findViewById(R.id.close);
+        TextView cut = (TextView) MyDialog.findViewById(R.id.cut);
+        hello.setEnabled(true);
+        final Spinner spin=MyDialog.findViewById(R.id.upblood);
+        close.setEnabled(true);
+        hello.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),List_Of_Users.class);
+                String blood=spin.getSelectedItem().toString();
+
+                intent.putExtra("blood",blood.trim());
+                intent.putExtra("near",near_by_user);
+
+                startActivity(intent);
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                //  Toast.makeText(getApplicationContext(), "HELLO I AM CLICKING CLOSE BUTTON", Toast.LENGTH_LONG).show();
+                MyDialog.cancel();
+            }
+        });
+
 
         MyDialog.show();
     }
