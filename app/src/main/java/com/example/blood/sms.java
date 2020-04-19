@@ -43,10 +43,10 @@ public class sms extends AppCompatActivity {
         messageText = (EditText) findViewById(R.id.message);
         //  phoneText = (EditText) findViewById(R.id.phoneText);
         sendButton = (Button) findViewById(R.id.sendButton);
-        cpp="+91";
+        //cpp="+91";
         //   ccp = (CountryCodePicker) findViewById(R.id.ccp);
         //   ccp.registerCarrierNumberEditText(phoneText);
-        //String Phonenumber = getIntent().getStringExtra("phoneno");
+        number = getIntent().getStringExtra("ph");
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +80,7 @@ public class sms extends AppCompatActivity {
     public void sendMySMS() {
 
         //  String phone = ccp.getFullNumberWithPlus();
-        String phone=cpp+"9448224033";
+        String phone="+91"+number;
         String message = messageText.getText().toString();
 
         //Check if the phoneNumber is empty
@@ -99,11 +99,11 @@ public class sms extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "MSG SENT", Toast.LENGTH_SHORT).show();
 
             }
+            //Intent intent=new Intent(getApplicationContext(),example.class);
 
+            //       // startActivity(intent);
         }
-        //Intent intent=new Intent(getApplicationContext(),example.class);
 
-       // startActivity(intent);
     }
 
     public void onResume() {

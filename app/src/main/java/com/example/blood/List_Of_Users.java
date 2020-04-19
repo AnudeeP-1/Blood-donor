@@ -1,6 +1,7 @@
 package com.example.blood;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -194,6 +195,9 @@ public class List_Of_Users extends AppCompatActivity {
                         user_information user=dataSnapshot.getValue(user_information.class);
                         String phone_number=user.getPhone();
                         //call your intent and transfer phone number to that page
+                        Intent intent = new Intent(List_Of_Users.this, sms.class);
+                        intent.putExtra("ph",phone_number);
+                        startActivity(intent);
 
 
                     }

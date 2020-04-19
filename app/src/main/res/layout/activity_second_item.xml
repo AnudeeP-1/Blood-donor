@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEB4B4"
+    tools:context="com.example.blood.second_item">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="200dp"
+            android:src="@drawable/life" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:text="After donating you sit in an observation area, where you rest and eat a light snack. After 15 minutes, you can leave. After your blood donation:Drink extra fluids for the next day or two.Avoid strenuous physical activity or heavy lifting for the next five hours.If you feel lightheaded, lie down with your feet up until the feeling passes.Keep the bandage on your arm and dry for five hours.If you have bleeding after removing the bandage, put pressure on the site and raise your arm until the bleeding stops.If bleeding or bruising occurs under the skin, apply a cold pack to the area periodically during the first 24 hours."
+            android:textColor="#000"
+            android:textSize="25dp"
+            android:layout_marginTop="50dp"
+            app:fontFamily="@font/antic"
+            android:textAlignment="textStart"
+            android:gravity="start" />
+    </LinearLayout>
+</ScrollView>

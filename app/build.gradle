@@ -43,9 +43,9 @@ dependencies {
 
     implementation 'com.firebaseui:firebase-ui-database:3.1.3'
     implementation 'com.google.android.material:material:1.0.0'
-    //harinandan
+    //sms
     implementation 'com.android.support:recyclerview-v7:29.1.0'
-    //harinandan
+    //sms
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

@@ -48,6 +48,27 @@ public class guidlines extends AppCompatActivity implements NavigationView.OnNav
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+        before.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), first_item.class);
+                startActivity(intent);
+            }
+        });
+        after.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), second_item.class);
+                startActivity(intent);
+            }
+        });
+        normal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), third_item.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
