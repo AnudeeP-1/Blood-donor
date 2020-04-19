@@ -222,13 +222,21 @@ public class List_Of_Users extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        user_information curent_user=dataSnapshot.getValue(user_information.class);
+                        final user_information curent_user=dataSnapshot.getValue(user_information.class);
                         FirebaseDatabase.getInstance().getReference(id).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 user_information requested_user=dataSnapshot.getValue(user_information.class);
                                 //curent user andre nanu, requested use andre donor,,,getLongi() getLatti() etc function use madi ning bekadaddu thegi and next intent kari
-
+//                                Intent intent = new Intent(List_Of_Users.this, MapsActivity.class);
+//                                intent.putExtra("mylati",curent_user.getLatti());
+//                                intent.putExtra("mylongi",curent_user.getLongi());
+//                                intent.putExtra("donorlati",requested_user.getLatti());
+//                                intent.putExtra("donorlongi",requested_user.getLongi());
+//                                startActivity(intent);
+                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                        Uri.parse("http://maps.google.com/maps?daddr="+requested_user.getLatti()+","+requested_user.getLongi()));
+                                startActivity(intent);
                             }
 
                             @Override
